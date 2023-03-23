@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import Alertdialog from './dialogbox';
-import Loadingicon from "./loading_icon";
 import { Markup } from 'interweave';
-import Headertwo from "./header_two";
 import $ from "jquery";
+
+import Headertwo from "./global/header_two";
+import Alertdialog from './global/dialogbox';
+import Loadingicon from "./global/loading_icon";
 
 
 class StaticPage extends Component {
@@ -23,7 +24,7 @@ class StaticPage extends Component {
     const requestOptions = {
       method: 'GET', headers: { 'Content-Type': 'text/html' }
     };
-    const svcUrl = "/html/page."+this.props.pageId +".html";
+    const svcUrl = "/ln2data/html/" + this.props.config.module + "/page."+this.props.pageId +".html";
 
 
     fetch(svcUrl, requestOptions).then((res) => res.text()).then(
@@ -65,7 +66,7 @@ class StaticPage extends Component {
 
     return (
       <div>
-        <Headertwo menu={this.props.menu} pageId={this.props.pageId}/>
+        <Headertwo config={this.props.config} pageId={this.props.pageId}/>
         <Alertdialog dialog={this.state.dialog} onClose={this.handleDialogClose}/>
         <div className="pagecnwrapper">
           <div className="pagecn">

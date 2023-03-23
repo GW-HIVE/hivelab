@@ -1,18 +1,20 @@
 import React, { Component } from "react";
-import StaticPage from "./components/static_page";
-import Alertdialog from './components/dialogbox';
-import Loadingicon from "./components/loading_icon";
-import * as LocalConfig from "./components/local_config";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Headerone from "./components/header_one";
-import Footer from "./components/footer";
+
+import Headerone from "./components/global/header_one";
+import Footer from "./components/global/footer";
+import Alertdialog from './components/global/dialogbox';
+import Loadingicon from "./components/global/loading_icon";
+import StaticPage from "./components/static_page";
+
 
 
 class App extends Component {
 
   state = {
-    menu:{},
+    module:"global",
+    config:{},
     isLoaded:false,
     dialog:{
       status:false, 
@@ -31,11 +33,11 @@ class App extends Component {
     const requestOptions = {
       method: 'GET', headers: { 'Content-Type': 'text/plain' }
     };
-    const svcUrl = "/json/menu.json";
+    const svcUrl = "/ln2data/json/global/config.json";
     fetch(svcUrl, requestOptions).then((res) => res.json()).then(
         (result) => {
           var tmpState = this.state;
-          tmpState.menu = result;
+          tmpState.config = result;
           tmpState.isLoaded = true;
           this.setState(tmpState);
           //console.log("Result:", result);
@@ -59,20 +61,20 @@ class App extends Component {
     return (
       <div>
       <Alertdialog dialog={this.state.dialog} onClose={this.handleDialogClose}/>
-      <Headerone menu={this.state.menu}/>
+      <Headerone config={this.state.config}/>
       <Router>
         <Switch>
           <Route
             path="/:pageId"
             render={(props) => (
-              <StaticPage menu={this.state.menu} pageId={props.match.params.pageId}/>
+              <StaticPage config={this.state.config} pageId={props.match.params.pageId}/>
             )}
           />
           <Route
             exact
             path="/"
             render={(props) => (
-              <StaticPage menu={this.state.menu} pageId={"home"}/>
+              <StaticPage config={this.state.config} pageId={"home"}/>
             )}
           />
         </Switch>
