@@ -47,9 +47,6 @@ def main():
     cmd_list = []
     if os.path.isdir(data_path) == False:
         cmd_list.append("mkdir -p %s" % (data_path))
-    if os.path.isdir("public/ln2data"):
-        cmd_list.append("rm -f public/ln2data")
-    cmd_list.append("ln -s %s public/ln2data" % (data_path))
 
 
     cmd = "npm run build"

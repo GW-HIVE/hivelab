@@ -33,7 +33,7 @@ class App extends Component {
     const requestOptions = {
       method: 'GET', headers: { 'Content-Type': 'text/plain' }
     };
-    const svcUrl = "/ln2data/json/global/config.json";
+    const svcUrl = "/json/global/config.json";
     fetch(svcUrl, requestOptions).then((res) => res.json()).then(
         (result) => {
           var tmpState = this.state;
