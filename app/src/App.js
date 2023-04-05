@@ -28,6 +28,26 @@ class App extends Component {
   }
 
   componentDidMount() {
+<<<<<<< HEAD
+=======
+    var reqObj = {};
+    const requestOptions = {
+      method: 'GET', headers: { 'Content-Type': 'text/plain' }
+    };
+    const svcUrl = "/json/global/config.json";
+    fetch(svcUrl, requestOptions).then((res) => res.json()).then(
+        (result) => {
+          var tmpState = this.state;
+          tmpState.config = result;
+          tmpState.isLoaded = true;
+          this.setState(tmpState);
+          //console.log("Result:", result);
+        },
+        (error) => {
+          console.log("Error:", error);
+        }
+    );
+>>>>>>> 0994d246ed6ee05bb99b0b154b19a3fc80d76bc5
   }
 
 

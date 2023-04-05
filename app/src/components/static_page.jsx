@@ -24,7 +24,11 @@ class StaticPage extends Component {
     const requestOptions = {
       method: 'GET', headers: { 'Content-Type': 'text/html' }
     };
+<<<<<<< HEAD
     const svcUrl = "/html/page."+this.props.pageId +".html";
+=======
+    const svcUrl = "/html/" + this.props.config.module + "/page."+this.props.pageId +".html";
+>>>>>>> 0994d246ed6ee05bb99b0b154b19a3fc80d76bc5
 
 
     fetch(svcUrl, requestOptions).then((res) => res.text()).then(
