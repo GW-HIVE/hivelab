@@ -1,0 +1,8 @@
+{
+    "app_port":{
+        "prd":"8080",
+        "tst":"8080"
+    },
+    "data_path":"/data/shared/hivelab/"
+}
+
