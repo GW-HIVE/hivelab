@@ -7,7 +7,7 @@ import Footer from "./components/global/footer";
 import Alertdialog from './components/global/dialogbox';
 import Loadingicon from "./components/global/loading_icon";
 import StaticPage from "./components/static_page";
-import configObj from "./components/config.json";
+import configObj from "./components/global/config.json";
 
 
 class App extends Component {
@@ -28,33 +28,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
-=======
-    var reqObj = {};
-    const requestOptions = {
-      method: 'GET', headers: { 'Content-Type': 'text/plain' }
-    };
-    const svcUrl = "/json/global/config.json";
-    fetch(svcUrl, requestOptions).then((res) => res.json()).then(
-        (result) => {
-          var tmpState = this.state;
-          tmpState.config = result;
-          tmpState.isLoaded = true;
-          this.setState(tmpState);
-          //console.log("Result:", result);
-        },
-        (error) => {
-          console.log("Error:", error);
-        }
-    );
->>>>>>> 0994d246ed6ee05bb99b0b154b19a3fc80d76bc5
   }
 
 
   render() {
-    
-  
-    
+   
 
     return (
       <div>

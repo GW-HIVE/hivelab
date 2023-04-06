@@ -24,26 +24,21 @@ class StaticPage extends Component {
     const requestOptions = {
       method: 'GET', headers: { 'Content-Type': 'text/html' }
     };
-<<<<<<< HEAD
     const svcUrl = "/html/page."+this.props.pageId +".html";
-=======
-    const svcUrl = "/html/" + this.props.config.module + "/page."+this.props.pageId +".html";
->>>>>>> 0994d246ed6ee05bb99b0b154b19a3fc80d76bc5
-
 
     fetch(svcUrl, requestOptions).then((res) => res.text()).then(
         (result) => {
-          console.log("Result:",result);
+          //console.log("Result:",result.length);
           var tmpState = this.state;
           tmpState.isLoaded = true;
-          if(result.indexOf("!DOCTYPE") !== -1){
+          if(result.indexOf("<hivelabtag>") === -1){
             tmpState.dialog.status = true;
             tmpState.dialog.msg = "Page=" + this.props.pageId + " does NOT exist!";
           }
           else{
-            tmpState.html = result;
+            tmpState.html = result.replace("<hivelabtag>", "");
           }
-          this.setState(tmpState);
+	  this.setState(tmpState);
         },
         (error) => {
           console.log("Error:", error);
