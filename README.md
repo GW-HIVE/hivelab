@@ -4,6 +4,16 @@ The following must be available on your server:
 * Node.js and npm
 * docker
 
+## Preamble
+Check that docker is running.
+```
+systemctl status docker
+```
+
+If docker is inactive, start it.
+```
+systemctl start docker
+```
 
 ## Setting config parameters
 After cloning this repo, you will need to set the paramters given in
@@ -19,7 +29,7 @@ From the "app" subdirectory, run the python script given to build and start cont
   python3 create_app_container.py -s {DEP}
   docker ps --all
   ```
-The last command should list docker all containers and you should see the container
+Where `{DEP}` is deployment you're starting (i.e. `tst` or `prd`). The last command should list docker all containers and you should see the container
 you created "running_hivelab_app_{DEP}". To start this container, the best way is
 to create a service file (/usr/lib/systemd/system/docker-hivelab-app-{DEP}.service),
 and place the following content in it.
