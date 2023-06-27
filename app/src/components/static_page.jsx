@@ -28,7 +28,7 @@ class StaticPage extends Component {
 
     fetch(svcUrl, requestOptions).then((res) => res.text()).then(
         (result) => {
-          //console.log("Result:",result.length);
+          console.log("Result:",result);
           var tmpState = this.state;
           tmpState.isLoaded = true;
           if(result.indexOf("<hivelabtag>") === -1){
