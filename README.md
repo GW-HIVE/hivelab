@@ -3,6 +3,7 @@ The following must be available on your server:
 
 * Node.js and npm
 * docker
+* Clone this repo into your home directory on the server and `git pull` after you've merged any new changes
 
 ## Preamble
 Check that docker is running.
