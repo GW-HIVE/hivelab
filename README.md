@@ -3,6 +3,7 @@ The following must be available on your server:
 
 * Node.js and npm
 * docker
+* Clone this repo into your home directory on the server and `git pull` after you've merged any new changes
 
 ## Preamble
 Check that docker is running.
@@ -95,6 +96,24 @@ first line.
 ## Editing or adding to the menu
 The menu is controlled by the JSON file /app/src/components/global/config.json, and 
 one can edit this JSON file to add/edit to the menu structure.
+
+## Pushing changes to website
+To push your changes, you'll have to stop and remove the docker image, then rebuild from the repo. Follow these steps:
+1. Check which docker images are running:
+`docker ps -a`
+2. Stop running docker instances:
+`docker stop <instance>`
+3. Remove container:
+`docker rm <container name>`
+4. Remove image:
+`docker rmi <image id>`
+
+From here, you can continue with Robel's pipeline above at the point of [building the container](https://github.com/GW-HIVE/hivelab#creating-and-starting-docker-container-for-the-app), and the three commands to start it up:
+```
+sudo systemctl daemon-reload 
+sudo systemctl enable docker-hivelab-app-{DEP}.service
+sudo systemctl start docker-hivelab-app-{DEP}.service
+```
 
 
 
