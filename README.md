@@ -102,10 +102,10 @@ To push your changes, you'll have to stop and remove the docker image, then rebu
 1. Check which docker images are running:
 `docker ps -a`
 2. Stop running docker instances (using service file present in server):
-'sudo systemctl stop docker-hivelab-app-{DEP}.service'
-3. Remove container:
+`sudo systemctl stop docker-hivelab-app-{DEP}.service`
+4. Remove container:
 `docker rm <container name>`
-4. Remove image:
+5. Remove image:
 `docker rmi <image id>`
 
 From here, you can continue with Robel's pipeline above at the point of [building the container](https://github.com/GW-HIVE/hivelab#creating-and-starting-docker-container-for-the-app), and the three commands to start it up:
