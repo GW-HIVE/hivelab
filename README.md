@@ -101,8 +101,8 @@ one can edit this JSON file to add/edit to the menu structure.
 To push your changes, you'll have to stop and remove the docker image, then rebuild from the repo. Follow these steps:
 1. Check which docker images are running:
 `docker ps -a`
-2. Stop running docker instances:
-`docker stop <instance>`
+2. Stop running docker instances (using service file present in server):
+'sudo systemctl stop docker-hivelab-app-{DEP}.service'
 3. Remove container:
 `docker rm <container name>`
 4. Remove image:
