@@ -7,7 +7,6 @@ These steps are for deploying this repository on a new server. If a full/clean d
 - [Setting Config Parameters](#setting-config-parameters)
 - [Creating and Starting Docker Container](#creating-and-starting-docker-container-for-the-app)
 - [Mapping Containers to Public Domains](#mapping-app-and-api-containers-to-public-domains)
-- []
 
 ## Server Requirements
 
