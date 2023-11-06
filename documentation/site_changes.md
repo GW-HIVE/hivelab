@@ -1,6 +1,7 @@
 # Making/Adding Content
 
-- [Editing or Adding New Static Global Pages]
+- [Editing or Adding New Static Global Pages](#editing-or-adding-new-static-global-pages)
+- [Editing or Adding to the Menu](#editing-or-adding-to-the-menu)
 
 ## Editing or Adding New Static Global Pages 
 The files corresponding to static global pages are under /app/public/html/, and all you
