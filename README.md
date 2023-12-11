@@ -1,6 +1,8 @@
 # Hivelab Webpage Repository 
 
-Web page is available [here](https://hivelab.biochemistry.gwu.edu/).
+Web page is available at https://hivelab.biochemistry.gwu.edu/. VPN not required. 
+
+The test webpage is available at https://hivelab.tst.biochemistry.gwu.edu/. In order to view the test page you have to be on the VPN. 
 
 Depending on if you are just pushing new updates or doing a full clean deployment setup you can refer to these guides:
 - [Clean/Full Deployment From Scratch](/documentation/clean_deployment.md) 
