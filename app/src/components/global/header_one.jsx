@@ -63,7 +63,7 @@ class Backendheader extends Component {
       <Navbar collapseOnSelect expand="lg" variant="dark" className="globalheader">
       <Container >
         <Navbar.Brand href="#home" className="navbarbrand" >
-        <a href="/z-dashboard">
+        <a href="/">
         <div className="globalheader_logo">
           <div className="globalheader_logo_img">
              <img alt="" src={process.env.PUBLIC_URL + '/imglib/gw_logo.png'}
