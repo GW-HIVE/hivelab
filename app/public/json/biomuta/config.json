@@ -1,0 +1,25 @@
+{
+  "module":"biomuta",
+  "title":"BioMuta - single-nucleotide variations (SNVs) in cancer",
+  "menu":[
+    {
+      "pageid":"home",
+      "label":"BioMuta",
+      "url":"/home",
+      "children":[],
+      "nav":[
+        {"pageid":"home", "url":"/", "label":"TOOLS"}
+      ]
+    },
+    {
+      "pageid":"readme",
+      "label":"README",
+      "url":"/readme",
+      "children":[],
+      "nav":[
+        {"pageid":"home", "url":"/", "label":"TOOLS"},
+        {"pageid":"home", "url":"/", "label":"BioMuta"}
+      ]
+    }
+  ]
+}
