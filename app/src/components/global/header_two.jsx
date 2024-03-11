@@ -65,8 +65,8 @@ class Backendheader extends Component {
         </div>
         <div class="leftblock" style={sList[3]}> 
           <img alt="" src={'/imglib/hive_logo.png'} style={sList[4]}/> <br/>
-          High-performance Integrated Virtual Environment
-        </div>
+          <a className="reglinkblue" href="https://hive.biochemistry.gwu.edu/dna.cgi?cmd=main">High-performance Integrated Virtual Environment</a>        
+          </div>
       </div>
     );
 
