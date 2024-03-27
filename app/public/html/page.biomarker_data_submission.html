@@ -1,0 +1,59 @@
+<hivelabtag>
+
+<h4 id="Top">Instructions to submit Biomarker Data</h4>
+
+  <body>
+    <p>To submit data for the <a class=reglinkblue href="https://hivelab.biochemistry.gwu.edu/biomarker-partnership/data">Biomarker Partnership Data Page</a>, the biomarker data model must be followed. Instructions on how to format the data for submission, where to send it, and creating a BCO for the data submitted will be provided below.</p>
+    
+    <br><br>
+
+    <h5 id="Instructions">Instructions</h5>
+
+    <br><br>
+
+    <ol>
+      <li>Biomarker data collected should follow the <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership?tab=readme-ov-file#scope-and-goal-of-the-project">biomarker data model</a>.</li>
+      <li>
+        "Core" fields should be filled in from the data source where biomarker data is collected. Core fields:
+        <ol>
+          <li>biomarker</li>
+          <li>assessed_biomarker_entity and assessed_biomarker_entity_id</li>
+          <li>condition and condition_id OR exposure_agent and exposure_agent_id</li>
+        </ol>
+      </li> 
+      <li>
+        Other fields and annotations may also be collected from the data source, however if data is missing it can also be inferred or mapped from other sources.
+        <ol>
+          <li>A script to map DOIDs has been proviided in the Biomarker GitHub along with other mapping scripts (<a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/tree/main/src/populate_maps"> Mapping Scripts</a>. This is an example of how missing data can be mapped from external resources</li>
+        </ol>
+      </li>
+      <li>
+        Apply the following standards to the data when possible:
+        <ol>
+          <li>condition_id = DOID</li>
+          <li>specimen_id = UBERON</li>
+          <li>evidence_source = "SOURCE":"ID"</li>
+          <li> For assessed_biomarker_entity_id please refer to this GitHub <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/blob/main/supplementary_files/documentation/contributing_data.md">documentation</a> for which standards to follow</li>
+        </ol
+      </li>
+      <li>Provide extra annotations from your DCC/data with the agreed upon standards from the Biomarker Annotation RFC. This data does not have to follow the data model and can be added into the file being submitted.</li>
+      <li>
+        Create a tsv/json file with the agreed upon fields which correspond to the biomarker data model. The <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/tree/main/data_dictionary">data dictionary</a> provides details on what the different fields represent.
+        <ol>
+          <li>The preferred method for data submission is a json file as it will help ingest the data into the existing data efficiently. However, tsv file submissions are ok as well. In the GitHub, a tsv-to-json script exists as well as a json-to-tsv script in the <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/tree/main/src/data_conversion">Data Conversion Folder</a>.</li>
+          <li>The biomarker data page has examples of tsv data submissions and how the data should be formatted with the appropriate biomarker fields. <a class=reglinkblue href="https://hivelab.biochemistry.gwu.edu/biomarker-partnership/data/BCO_000435">Example</a></li>
+        </ol>
+      </li>
+      <li>Once data is formatted and cleaned please send any data to daniallmasood@gwu.edu and skim658@gwu.edu</li>
+      <li>
+        Concurrently with submitting data please fill out the <a class=reglinkblue href="https://forms.gle/NAqWKT2zg9Z1RC2T6">BCO Information: Biomarker Data Google Form</a>.
+        <ol>
+          <li>This will give metadata and description on how biomarker data was collected and is important for adding submitted data to the Biomarker Data page. An example of a previous BCO is provided in the sheet and available on the biomarker data page as well. <a class=reglinkblue href="https://hivelab.biochemistry.gwu.edu/biomarker-partnership/data/BCO_000435">Example</a></li>
+        </ol>
+      </li>
+    </ol>
+
+    <br><br>
+
+    <p>We are looking to collect data by mid-end of April. After the first data submission from a DCC, a meeting will be scheduled to go over the first data submission to go through the data and make sure the data submission is properly ready to be incorporated with existing biomarker data. We look forward to seeing what kind of data can be collected from this partnership. Thank you and we appreciate the effort from everyone!</p>
+  </body>
