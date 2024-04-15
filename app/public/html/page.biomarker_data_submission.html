@@ -33,7 +33,12 @@
           <li> For assessed_biomarker_entity_id please refer to this GitHub <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/blob/main/supplementary_files/documentation/contributing_data.md">documentation</a> for which standards to follow</li>
         </ol
       </li>
-      <li>Provide extra annotations from your DCC/data with the agreed upon standards from the Biomarker Annotation RFC. This data does not have to follow the data model and can be added into the file being submitted.</li>
+      <li>
+        Provide extra annotations from your DCC/data with the agreed upon standards from the Biomarker Annotation RFC. This data does not have to follow the data model and can be submitted in a separate file.
+        <ol>
+          <li>For example: Relevant EHR data/LOINC data for biomarkers/biomarker entities can be included in a separate sheet.</li>
+        </ol>
+      </li>
       <li>
         Create a tsv/json file with the agreed upon fields which correspond to the biomarker data model. The <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/tree/main/data_dictionary">data dictionary</a> provides details on what the different fields represent.
         <ol>
@@ -41,6 +46,8 @@
           <li>The biomarker data page has examples of tsv data submissions and how the data should be formatted with the appropriate biomarker fields. <a class=reglinkblue href="https://hivelab.biochemistry.gwu.edu/biomarker-partnership/data/BCO_000435">Example</a></li>
         </ol>
       </li>
+      <li>For panel biomarkers, if the biomarkers are part of the same panel, the biomarker_id value for each biomarker should be any string value that can uniquely identify which rows are part of the same biomarker panel. <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/blob/main/supplementary_files/documentation/contributing_data.md">Documentation</a></li>
+      <li>If curating data in tsv format: If biomarker rows are part of the same biomarker entry but differ on specimen, evidence, or role, then the biomarker_id for each row should be any string value that can uniquely identify which rows are part of the same biomarker.</li>
       <li>Once data is formatted and cleaned please send any data to daniallmasood@gwu.edu and skim658@gwu.edu</li>
       <li>
         Concurrently with submitting data please fill out the <a class=reglinkblue href="https://forms.gle/NAqWKT2zg9Z1RC2T6">BCO Information: Biomarker Data Google Form</a>.
@@ -48,6 +55,7 @@
           <li>This will give metadata and description on how biomarker data was collected and is important for adding submitted data to the Biomarker Data page. An example of a previous BCO is provided in the sheet and available on the biomarker data page as well. <a class=reglinkblue href="https://hivelab.biochemistry.gwu.edu/biomarker-partnership/data/BCO_000435">Example</a></li>
         </ol>
       </li>
+      <li>If there are any further questions please consult the <a class=reglinkblue href="https://github.com/clinical-biomarkers/biomarker-partnership/blob/main/supplementary_files/documentation/contributing_data.md">GitHub Documentation</a> for contributing data or reach out to Daniall or Sean using the emails above.</li>
     </ol>
 
     <br>
