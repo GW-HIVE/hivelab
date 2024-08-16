@@ -1,5 +1,13 @@
+/*
+Purpose: Displays the search results returned by the backend.
+Related Backend Script: searchBioMuta.py
+
+This component should fetch results from the searchBioMuta API endpoint and display them in a table format.
+Integrate filtering and pagination options similar to those described in module.js.
+Handle edge cases, such as no results found or errors in fetching data.
+*/
+
 import React from "react";
-import Searchbox from "./biomuta_searchbox";
 import Resultfilter from "./result_filter";
 import { filterObjectList, rndrSearchResults } from './util';
 import Paginator from "./paginator";
@@ -19,11 +27,26 @@ class SearchResults extends React.Component {
       msg: ""
     },
     response: null,
-    isLoaded: false,
+    isLoaded: true,
+    isSearching: false,
   };
 
-  handleSearch = () => {
-    const queryValue = $("#query").val() || "";
+  handleSearch = (queryValue) => {
+    if (!queryValue) {
+      this.setState({
+        dialog: {
+          status: true,
+          msg: "Please enter a valid search term."
+        }
+      });
+      return;
+    }
+
+    this.setState({
+      isLoaded: false,
+      isSearching: true,
+    });
+
     const reqObj = { qryList: [{ fieldname: "geneName", fieldvalue: queryValue }] };
 
     this.handleFilterReset();
@@ -42,17 +65,22 @@ class SearchResults extends React.Component {
           this.setState({
             response: result,
             isLoaded: true,
+            isSearching: false,
             dialog: result.taskStatus === 0 ? { status: true, msg: result.errorMsg } : this.state.dialog
           });
         },
         (error) => {
           this.setState({
             isLoaded: true,
-            error,
+            isSearching: false,
+            dialog: {
+              status: true,
+              msg: "An error occurred while fetching the data. Please try again."
+            }
           });
         }
       );
-};
+  };
 
   handleFilterReset = () => {
     $('input[name="filtervalue"]:checkbox:checked').prop("checked", false);
@@ -89,13 +117,17 @@ class SearchResults extends React.Component {
   };
 
   render() {
-    const { response, isLoaded, filterlist, pageIdx, pageStartIdx, pageEndIdx, dialog } = this.state;
+    const { response, isLoaded, isSearching, filterlist, pageIdx, pageStartIdx, pageEndIdx, dialog } = this.state;
     
-    if (!isLoaded) {
+    if (isSearching) {
       return <Loadingicon />;
     }
 
-    const objList = (response && response.searchresults) ? response.searchresults.slice(2) : []; // Assuming the first two entries are headers
+    if (!isLoaded || !response) {
+      return null; // Render nothing if no search has been made yet
+    }
+
+    const objList = (response && response.searchresults) ? response.searchresults.slice(2) : []; 
     const { filterinfo, passedobjlist: passedObjList } = filterObjectList(objList, filterlist);
     const passedCount = passedObjList.length;
 
@@ -109,48 +141,43 @@ class SearchResults extends React.Component {
     const resultSummary = `<b>${passedCount}</b> results found${tmpList.length > 0 ? `, after filters: '${tmpList.join("', '")}'.` : "."}`;
 
     return (
-      <div>
+      <div className="search-results-container">
         <Alertdialog dialog={dialog} onClose={() => this.setState({ dialog: { status: false } })} />
 
-        <div className="pagecn">
-          <div className="leftblock" style={{width:"100%", margin:"20px 0px 0px 0px"}}>
-            <Searchbox onSearch={this.handleSearch} />
-          </div>
-          <div className="leftblock" style={{width:"100%", margin:"5px 0px 0px 0px", display: filterHideFlag}}>
-            <Resultfilter
-              filterinfo={filterinfo}
-              resultcount={objList.length}
-              resultSummary={resultSummary}
-              handleSearchIcon={this.handleSearchIcon}
-              handleFilterIcon={this.handleFilterIcon}
-              handleFilterApply={this.handleFilterApply}
-              handleFilterReset={this.handleFilterReset}
-            />
-          </div>
+        <div className="filter-container" style={{ display: filterHideFlag }}>
+          <Resultfilter
+            filterinfo={filterinfo}
+            resultcount={objList.length}
+            resultSummary={resultSummary}
+            handleSearchIcon={this.handleSearchIcon}
+            handleFilterIcon={this.handleFilterIcon}
+            handleFilterApply={this.handleFilterApply}
+            handleFilterReset={this.handleFilterReset}
+          />
+        </div>
 
-          <div className="leftblock" style={{width:"100%", margin:"60px 0px 0px 0px", borderBottom:"1px solid #ccc"}}>
-            <Paginator 
-              paginatorId={"top"}
-              pageCount={pageCount}
-              pageStartIdx={pageStartIdx}
-              pageEndIdx={pageEndIdx}
-              onClick={this.handlePaginatorClick}
-            />
-          </div>
+        <div className="paginator-container top">
+          <Paginator 
+            paginatorId={"top"}
+            pageCount={pageCount}
+            pageStartIdx={pageStartIdx}
+            pageEndIdx={pageEndIdx}
+            onClick={this.handlePaginatorClick}
+          />
+        </div>
 
-          <div className="leftblock" style={{margin:"20px 0px 0px 0px"}}>
-            {rndrSearchResults(passedObjList, startIdx, endIdx)}
-          </div>
+        <div className="results-table">
+          {passedCount > 0 ? rndrSearchResults(passedObjList, startIdx, endIdx) : <p>No results found</p>}
+        </div>
 
-          <div className="leftblock" style={{width:"100%", margin:"0px 0px 0px 0px", padding:"5px 0px 0px 0px", borderTop:"1px solid #ccc"}}>
-            <Paginator 
-              paginatorId={"bottom"}
-              pageCount={pageCount}
-              pageStartIdx={pageStartIdx}
-              pageEndIdx={pageEndIdx}
-              onClick={this.handlePaginatorClick}
-            />
-          </div>
+        <div className="paginator-container bottom">
+          <Paginator 
+            paginatorId={"bottom"}
+            pageCount={pageCount}
+            pageStartIdx={pageStartIdx}
+            pageEndIdx={pageEndIdx}
+            onClick={this.handlePaginatorClick}
+          />
         </div>
       </div>
     );
