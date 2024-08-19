@@ -9,6 +9,7 @@ Handle edge cases, such as no results found or errors in fetching data.
 
 import React from "react";
 import Resultfilter from "./result_filter";
+import Searchbox from "./biomuta_searchbox";
 import { filterObjectList, rndrSearchResults } from './util';
 import Paginator from "./paginator";
 import Loadingicon from "./global/loading_icon";
@@ -56,7 +57,7 @@ class SearchResults extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(reqObj)
     };
-    const svcUrl = "/searchBioMuta";
+    const svcUrl = "/api/searchBioMuta";
 
     fetch(svcUrl, requestOptions)
       .then((res) => res.json())

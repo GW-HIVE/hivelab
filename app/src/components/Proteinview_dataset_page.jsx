@@ -23,7 +23,7 @@ class DatasetPage extends Component {
 
   handleSearch = (results) => {
     const queryValue = $("#query").val() || "";
-    fetch("/getProteinData", {
+    fetch("/api/getProteinData", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fieldvalue: queryValue })
@@ -58,7 +58,7 @@ class DatasetPage extends Component {
             Enter your query in the search box below to retrieve relevant data.
           </p>
           <p>
-            <strong>Example Queries:</strong> KRAS, BRCA1, P12345
+            <strong>Example Queries:</strong> KRAS, BRCA1, Q9P1W8-1
           </p>
         </div>
 

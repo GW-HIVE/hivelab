@@ -21,7 +21,7 @@ const PlotComponent = ({ accession }) => {
     if (!accession) return;  // Don't fetch data if no accession is provided
 
     setIsLoading(true);
-    fetch(`/api/getProteinData`, {
+    fetch("/api/getProteinData", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fieldname: "uniprot_ac", fieldvalue: accession }),
