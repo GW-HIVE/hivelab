@@ -23,7 +23,7 @@ class DatasetPage extends Component {
 
   handleSearch = (results) => {
     const queryValue = $("#query").val() || "";
-    fetch("/api/getProteinData", {
+    fetch("/biomuta/api/getProteinData", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fieldvalue: queryValue })

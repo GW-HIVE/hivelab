@@ -57,7 +57,7 @@ class SearchResults extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(reqObj)
     };
-    const svcUrl = "/api/searchBioMuta";
+    const svcUrl = "/biomuta/api/searchBioMuta";
 
     fetch(svcUrl, requestOptions)
       .then((res) => res.json())
