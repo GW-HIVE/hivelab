@@ -21,7 +21,8 @@ class DatasetPage extends Component {
     canonicalAc: "", 
     isLoading: true, 
     currentPage: 1,
-    rowsPerPage: 10, 
+    rowsPerPage: 10,
+    downloadFilename: "",  // Add this to store the filename for the CSV download
   };
 
   componentDidMount() {
@@ -59,6 +60,7 @@ class DatasetPage extends Component {
             mutationTable: Array.isArray(result.mutationtable) ? result.mutationtable : [],
             plotData1: Array.isArray(result.plotdata1) ? result.plotdata1 : [],
             plotData2: Array.isArray(result.plotdata2) ? result.plotdata2 : [],
+            downloadFilename: result.downloadfilename || "",  // Store the download filename
             error: null,
             isLoading: false,
           }, () => {
@@ -113,7 +115,7 @@ class DatasetPage extends Component {
               <th>Ref Residue</th>
               <th>Alt Residue</th>
               <th>Cancer Id</th>
-              <th>Uberon Id</th>
+              <th>DoId</th>
               <th>Frequency</th>
               <th>Data Source</th>
               <th>UniProt Annotation</th>
@@ -165,7 +167,7 @@ class DatasetPage extends Component {
 
   render() {
     console.log("Rendering DatasetPage.");
-    const { canonicalAc, error, plotData1, plotData2, isLoading } = this.state;
+    const { canonicalAc, error, plotData1, plotData2, isLoading, downloadFilename } = this.state;
 
     return (
       <div className="dataset-page">
@@ -190,8 +192,6 @@ class DatasetPage extends Component {
 
             {this.renderChartInfo()}
 
-            
-
             <div className="plot-container">
               {Array.isArray(plotData1) && plotData1.length > 0 && (
                 <PlotComponent plotData={plotData1} title="Cancer Type vs. Frequency" />
@@ -200,6 +200,15 @@ class DatasetPage extends Component {
                 <PlotComponent plotData={plotData2} title="Position vs. Frequency" />
               )}
             </div>
+
+            {/* Add the download button */}
+            {downloadFilename && (
+              <div className="download-button">
+                <a href={`/biomuta/api/download/${downloadFilename}`} download>
+                  Download CSV
+                </a>
+              </div>
+            )}
           </>
         )}
       </div>
