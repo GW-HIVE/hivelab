@@ -56,9 +56,9 @@ class DatasetPage extends Component {
         if (result.taskStatus === 1) {
           console.log("Data processing successful. Setting state with fetched data.");
           this.setState({
-            mutationTable: result.mutationtable,
-            plotData1: result.plotdata1,
-            plotData2: result.plotdata2,
+            mutationTable: Array.isArray(result.mutationtable) ? result.mutationtable : [],
+            plotData1: Array.isArray(result.plotdata1) ? result.plotdata1 : [],
+            plotData2: Array.isArray(result.plotdata2) ? result.plotdata2 : [],
             error: null,
             isLoading: false,
           }, () => {
@@ -92,7 +92,8 @@ class DatasetPage extends Component {
   renderMutationTable = () => {
     console.log("Rendering mutation table.");
     const { mutationTable, currentPage, rowsPerPage } = this.state;
-    if (mutationTable.length === 0) {
+
+    if (!Array.isArray(mutationTable) || mutationTable.length === 0) {
       return <p>No mutation data available for the given protein.</p>;
     }
   
@@ -142,8 +143,6 @@ class DatasetPage extends Component {
     );
   };
 
-  
-  
   renderChartInfo = () => {
     console.log("Rendering chart info.");
     return (
@@ -191,11 +190,13 @@ class DatasetPage extends Component {
 
             {this.renderChartInfo()}
 
+            
+
             <div className="plot-container">
-              {plotData1.length > 0 && (
+              {Array.isArray(plotData1) && plotData1.length > 0 && (
                 <PlotComponent plotData={plotData1} title="Cancer Type vs. Frequency" />
               )}
-              {plotData2.length > 0 && (
+              {Array.isArray(plotData2) && plotData2.length > 0 && (
                 <PlotComponent plotData={plotData2} title="Position vs. Frequency" />
               )}
             </div>

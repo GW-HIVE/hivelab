@@ -10,14 +10,15 @@ Integrate with the dataset view to provide detailed data visualizations.
 */
 import React from "react";
 import { Chart } from "react-google-charts";
-
 const PlotComponent = ({ plotData, title }) => {
   const transformDataForChart = (plotData) => {
     if (!plotData || plotData.length === 0) {
+      console.log("No plotData available.");
       return [];
     }
     const chartData = [["Label", "Value"]];
     plotData.forEach((dataPoint) => {
+      console.log("Transforming dataPoint:", dataPoint);
       chartData.push([dataPoint.x, dataPoint.y1]);
     });
     return chartData;
@@ -26,12 +27,15 @@ const PlotComponent = ({ plotData, title }) => {
   const transformedPlotData = transformDataForChart(plotData);
 
   if (transformedPlotData.length <= 1) {
+    console.log("No valid data after transformation:", transformedPlotData);
     return (
       <div style={styles.noDataMessage}>
         <p>No data available for the provided accession.</p>
       </div>
     );
   }
+
+  console.log("Rendering chart with data:", transformedPlotData);
 
   return (
     <div style={styles.plotContainer}>
@@ -62,6 +66,7 @@ const PlotComponent = ({ plotData, title }) => {
     </div>
   );
 };
+
 
 const styles = {
   plotContainer: {
