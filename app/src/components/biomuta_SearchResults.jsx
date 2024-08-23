@@ -1,47 +1,35 @@
 /*
 Purpose: Displays the search results returned by the backend.
 Related Backend Script: searchBioMuta.py
+Unified Initial Search: The initial search is always made to searchBioMuta.py. The results are checked to see if a canonicalAc (protein ID) is present.
+Conditional Detailed Search: If a canonicalAc is found in the results, a secondary request is made to getProteinData.py to fetch detailed data about the protein.
 
 This component should fetch results from the searchBioMuta API endpoint and display them in a table format.
-Integrate filtering and pagination options similar to those described in module.js.
-Handle edge cases, such as no results found or errors in fetching data.
+
 */
-
-import React from "react";
-import Resultfilter from "./result_filter";
-import Searchbox from "./biomuta_searchbox";
-import { filterObjectList, rndrSearchResults } from './util';
-import Paginator from "./paginator";
+import React, { Component } from "react";
 import Loadingicon from "./global/loading_icon";
-import Alertdialog from './global/dialogbox';
-import $ from "jquery";
+import BioMutaTable from "./BiomutaTable";
 
-class SearchResults extends React.Component {  
+class SearchResults extends Component {
   state = {
-    filterlist: [],
-    pageIdx: 1,
-    pageBatchSize: 5,
-    pageStartIdx: 1,
-    pageEndIdx: 5,
-    dialog: {
-      status: false, 
-      msg: ""
-    },
-    response: null,
     isLoaded: true,
     isSearching: false,
+    response: null,
   };
 
-  handleSearch = (queryValue) => {
-    if (!queryValue) {
-      this.setState({
-        dialog: {
-          status: true,
-          msg: "Please enter a valid search term."
-        }
-      });
-      return;
+  componentDidMount() {
+    this.searchData(this.props.query);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.query !== prevProps.query) {
+      this.searchData(this.props.query);
     }
+  }
+
+  searchData(queryValue) {
+    if (!queryValue) return;
 
     this.setState({
       isLoaded: false,
@@ -50,136 +38,97 @@ class SearchResults extends React.Component {
 
     const reqObj = { qryList: [{ fieldname: "geneName", fieldvalue: queryValue }] };
 
-    this.handleFilterReset();
-
-    const requestOptions = { 
+    fetch("/biomuta/api/searchBioMuta", {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(reqObj)
-    };
-    const svcUrl = "/biomuta/api/searchBioMuta";
+    })
+    .then(response => response.json())
+    .then(searchBioMutaResult => {
+      if (searchBioMutaResult.taskStatus === 1 && searchBioMutaResult.searchresults.length > 2) { // Ensuring there's data beyond headers and types
+        this.setState({
+          response: searchBioMutaResult,
+          isLoaded: true,
+          isSearching: false,
+        });
+      } else {
+        this.setState({
+          isLoaded: true,
+          isSearching: false,
+          response: null, // No results found
+        });
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching data from backend:", error);
+      this.setState({
+        isLoaded: true,
+        isSearching: false,
+        response: null, // Handle fetch error by resetting response
+      });
+    });
+  }
 
-    fetch(svcUrl, requestOptions)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            response: result,
-            isLoaded: true,
-            isSearching: false,
-            dialog: result.taskStatus === 0 ? { status: true, msg: result.errorMsg } : this.state.dialog
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            isSearching: false,
-            dialog: {
-              status: true,
-              msg: "An error occurred while fetching the data. Please try again."
-            }
-          });
+  handleProteinClick = (canonicalAc) => {
+    window.location.href = `/biomuta/proteinview/${canonicalAc}`;
+  }
+
+  cleanData(data) {
+    return data.map((row) => {
+      return row.map((cell) => {
+        if (cell === null || cell === undefined || cell === 'NaN' || Number.isNaN(cell)) {
+          return 'N/A';
         }
-      );
-  };
-
-  handleFilterReset = () => {
-    $('input[name="filtervalue"]:checkbox:checked').prop("checked", false);
-    this.setState({ filterlist: [] });
-  };
-
-  handleFilterApply = () => {
-    $("#filtercn").toggle();
-    const tmpList = $('input[name="filtervalue"]:checkbox:checked')
-      .map(function () {
-        return $(this).val();
-      })
-      .get(); 
-    this.setState({ filterlist: tmpList });
-  };
-
-  handlePaginatorClick = (e) => {
-    if (e.target.id.includes("_disabled")) return;
-
-    let pageIdx = parseInt(e.target.id.split("_")[2]);
-    let tmpState = { ...this.state };
-
-    if (e.target.id.includes("_next_")) {
-      tmpState.pageStartIdx = tmpState.pageEndIdx + 1;
-      tmpState.pageEndIdx += tmpState.pageBatchSize;
-      pageIdx = tmpState.pageStartIdx;
-    } else if (e.target.id.includes("_prev_")) {
-      tmpState.pageStartIdx -= tmpState.pageBatchSize;
-      tmpState.pageEndIdx = tmpState.pageStartIdx + tmpState.pageBatchSize - 1;
-      pageIdx = tmpState.pageStartIdx;
-    }
-    tmpState.pageIdx = pageIdx;
-    this.setState(tmpState);
-  };
+        return cell;
+      });
+    });
+  }
 
   render() {
-    const { response, isLoaded, isSearching, filterlist, pageIdx, pageStartIdx, pageEndIdx, dialog } = this.state;
-    
+    const { response, isLoaded, isSearching } = this.state;
+
     if (isSearching) {
       return <Loadingicon />;
     }
 
-    if (!isLoaded || !response) {
-      return null; // Render nothing if no search has been made yet
+    if (!isLoaded) {
+      return null;
     }
 
-    const objList = (response && response.searchresults) ? response.searchresults.slice(2) : []; 
-    const { filterinfo, passedobjlist: passedObjList } = filterObjectList(objList, filterlist);
-    const passedCount = passedObjList.length;
+    if (!response) {
+      return (
+        <div className="no-results-message">
+          <p>No results found for the given query.</p>
+        </div>
+      );
+    }
 
-    const batchSize = 20;
-    const pageCount = Math.ceil(passedCount / batchSize);
-    const startIdx = batchSize * (pageIdx - 1) + 1;
-    const endIdx = Math.min(startIdx + batchSize - 1, passedCount);
+    const headers = response.searchresults[0];
+    const data = response.searchresults.slice(2); // Skip the header and type rows
+    const cleanedData = this.cleanData(data);
 
-    const filterHideFlag = objList.length > 0 ? "block" : "none";
-    const tmpList = filterlist.map(f => `<b>${f.split("|")[1]}</b>`);
-    const resultSummary = `<b>${passedCount}</b> results found${tmpList.length > 0 ? `, after filters: '${tmpList.join("', '")}'.` : "."}`;
+    const renderedData = cleanedData.map((row, rowIndex) => {
+      return row.map((cell, cellIndex) => {
+        if (cellIndex === 0) {
+          return (
+            <span 
+              style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+              onClick={() => this.handleProteinClick(cell)}
+              key={cellIndex}
+            >
+              {cell}
+            </span>
+          );
+        }
+        return <span key={cellIndex}>{cell}</span>;
+      });
+    });
 
     return (
       <div className="search-results-container">
-        <Alertdialog dialog={dialog} onClose={() => this.setState({ dialog: { status: false } })} />
-
-        <div className="filter-container" style={{ display: filterHideFlag }}>
-          <Resultfilter
-            filterinfo={filterinfo}
-            resultcount={objList.length}
-            resultSummary={resultSummary}
-            handleSearchIcon={this.handleSearchIcon}
-            handleFilterIcon={this.handleFilterIcon}
-            handleFilterApply={this.handleFilterApply}
-            handleFilterReset={this.handleFilterReset}
-          />
-        </div>
-
-        <div className="paginator-container top">
-          <Paginator 
-            paginatorId={"top"}
-            pageCount={pageCount}
-            pageStartIdx={pageStartIdx}
-            pageEndIdx={pageEndIdx}
-            onClick={this.handlePaginatorClick}
-          />
-        </div>
-
-        <div className="results-table">
-          {passedCount > 0 ? rndrSearchResults(passedObjList, startIdx, endIdx) : <p>No results found</p>}
-        </div>
-
-        <div className="paginator-container bottom">
-          <Paginator 
-            paginatorId={"bottom"}
-            pageCount={pageCount}
-            pageStartIdx={pageStartIdx}
-            pageEndIdx={pageEndIdx}
-            onClick={this.handlePaginatorClick}
-          />
-        </div>
+        <BioMutaTable headers={headers} data={renderedData} />
       </div>
     );
   }

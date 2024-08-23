@@ -732,3 +732,59 @@ span.faqquestionid{
   .plot-container {
     margin-top: 30px;
   }
+
+  .dataset-page {
+    padding: 20px;
+  }
+  
+  .info-section h2 {
+    color: #00457C; /* Match the navigation bar */
+    margin-bottom: 10px;
+  }
+  
+  .info-section p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .mutation-table-container {
+    margin-bottom: 30px;
+  }
+  
+  .mutation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .mutation-table th,
+  .mutation-table td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .mutation-table th {
+    background-color: #00457C;
+    color: #ffffff;
+  }
+  
+  .mutation-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .plot-container {
+    margin-bottom: 20px;
+  }
+  
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .loading-container,
+  .no-data-message {
+    text-align: center;
+    font-style: italic;
+  }
+  

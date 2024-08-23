@@ -4,36 +4,40 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Headerone from "./components/global/header_one";
 import Footer from "./components/global/footer";
-import Loadingicon from "./components/global/loading_icon";
 import StaticPage from "./components/static_page";
+import SearchResults from "./components/biomuta_SearchResults";  // Import the SearchResults component
 import DatasetPage from "./components/Proteinview_dataset_page"; // Import the Biomuta DatasetPage component
 import configObj from "./components/global/config.json";
 
+import BiomutaParentPage from "./components/BiomutaParentPage";
 
 class App extends Component {
   render() {
     return (
       <div>
-        <Headerone config={configObj}/>
+        <Headerone config={configObj} />
         <Router>
           <Switch>
-            <Route
-              path="/biomuta"
-              render={(props) => (
-                <DatasetPage /> // Render the DatasetPage for the search route
-              )}
-            />
+            
+          {/* Protein Dataset Page - Using the canonicalAc from the URL */}
+          <Route path="/biomuta/proteinview/:canonicalAc" component={DatasetPage} />
+
+          {/* BioMuta Parent Page */}
+          <Route path="/biomuta" component={BiomutaParentPage} />
             <Route
               path="/:pageId"
               render={(props) => (
-                <StaticPage config={configObj} pageId={props.match.params.pageId}/>
+                <StaticPage
+                  config={configObj}
+                  pageId={props.match.params.pageId}
+                />
               )}
             />
             <Route
               exact
               path="/"
               render={(props) => (
-                <StaticPage config={configObj} pageId={"home"}/>
+                <StaticPage config={configObj} pageId={"home"} />
               )}
             />
           </Switch>

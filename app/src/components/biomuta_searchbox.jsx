@@ -2,11 +2,7 @@
 BiomutaSearchbox Component
 Purpose: A search box component to allow users to search for gene names, accessions, or protein IDs.
 Related Backend Script: searchBioMuta.py
-
-The search box should trigger a search that interacts with the searchBioMuta API endpoint.
-Upon submitting the search, the results should be fetched and displayed using the BiomutaSearchResults component.
 */
-
 import React, { useState } from "react";
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -18,7 +14,7 @@ const Searchbox = ({ onSearch }) => {
 
   const handleSearch = () => {
     if (query.trim() !== '') {
-      onSearch(query);
+      onSearch(query); // Trigger the search function
     }
   };
 

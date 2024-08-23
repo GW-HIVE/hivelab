@@ -8,109 +8,84 @@ The charts should be interactive, allowing users to toggle between different vie
 Integrate with the dataset view to provide detailed data visualizations.
 
 */
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Chart } from "react-google-charts";
 
-const PlotComponent = ({ accession }) => {
-  const [plotData1, setPlotData1] = useState(null);
-  const [plotData2, setPlotData2] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+const PlotComponent = ({ plotData, title }) => {
+  const transformDataForChart = (plotData) => {
+    if (!plotData || plotData.length === 0) {
+      return [];
+    }
+    const chartData = [["Label", "Value"]];
+    plotData.forEach((dataPoint) => {
+      chartData.push([dataPoint.x, dataPoint.y1]);
+    });
+    return chartData;
+  };
 
-  useEffect(() => {
-    if (!accession) return;  // Don't fetch data if no accession is provided
+  const transformedPlotData = transformDataForChart(plotData);
 
-    setIsLoading(true);
-    fetch("/biomuta/api/getProteinData", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fieldname: "uniprot_ac", fieldvalue: accession }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setPlotData1(data.plotdata1 || []);
-        setPlotData2(data.plotdata2 || []);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error('Fetch error:', err);
-        setError('Failed to load plot data.');
-        setIsLoading(false);
-      });
-  }, [accession]);
-
-  if (!accession) {
+  if (transformedPlotData.length <= 1) {
     return (
-      <div className="info-message-container">
-        <div className="info-message">
-          <i className="info-icon"></i> {/* Add an icon here */}
-          <p>Please enter a search query to display data.</p>
-          <p>Try searching by Gene Name, Accession Number, or Protein ID.</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <p>Loading data, please wait...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="error-message">
-        <p>Error: {error}</p>
-      </div>
-    );
-  }
-
-  if (!plotData1 && !plotData2) {
-    return (
-      <div className="no-data-message">
+      <div style={styles.noDataMessage}>
         <p>No data available for the provided accession.</p>
       </div>
     );
   }
 
   return (
-    <div className="plot-container">
-      <h3>Cancer Type vs. Frequency</h3>
+    <div style={styles.plotContainer}>
+      <h3 style={styles.plotTitle}>{title}</h3>
       <Chart
         chartType="BarChart"
         width="100%"
         height="400px"
-        data={plotData1}
+        data={transformedPlotData}
         options={{
-          chartArea: { width: '50%' },
-          hAxis: { title: 'Frequency', minValue: 0 },
-          vAxis: { title: 'Cancer Type' },
-          legend: { position: 'none' }
-        }}
-      />
-      <h3>Position vs. Frequency</h3>
-      <Chart
-        chartType="BarChart"
-        width="100%"
-        height="400px"
-        data={plotData2}
-        options={{
-          chartArea: { width: '50%' },
-          hAxis: { title: 'Frequency', minValue: 0 },
-          vAxis: { title: 'Position' },
-          legend: { position: 'none' }
+          chartArea: { width: '70%' },
+          hAxis: {
+            title: 'Frequency',
+            minValue: 0,
+            textStyle: { fontSize: 12, color: '#333' },
+            titleTextStyle: { fontSize: 14, bold: true, color: '#333' }
+          },
+          vAxis: {
+            title: 'Cancer Type / Position',
+            textStyle: { fontSize: 12, color: '#333' },
+            titleTextStyle: { fontSize: 14, bold: true, color: '#333' }
+          },
+          legend: { position: 'none' },
+          backgroundColor: '#f9f9f9',
+          bar: { groupWidth: '75%' }
         }}
       />
     </div>
   );
 };
 
-export default PlotComponent;
+const styles = {
+  plotContainer: {
+    padding: '20px',
+    backgroundColor: '#fff',
+    borderRadius: '5px',
+    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+    marginBottom: '20px',
+  },
+  plotTitle: {
+    marginBottom: '15px',
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#333',
+  },
+  noDataMessage: {
+    textAlign: 'center',
+    padding: '20px',
+    backgroundColor: '#f8d7da',
+    color: '#721c24',
+    border: '1px solid #f5c6cb',
+    borderRadius: '5px',
+    marginBottom: '20px',
+  },
+};
 
+export default PlotComponent;

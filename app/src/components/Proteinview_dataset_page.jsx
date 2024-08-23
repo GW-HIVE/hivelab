@@ -2,91 +2,205 @@
 /*
 ProteinDatasetPage Component
 Purpose: Handles rendering detailed datasets for specific proteins.
-Related Backend Scripts: getProteinData.py, checkAccession.py
-
+Related Backend Scripts: getProteinData.py
 This component should render detailed datasets returned by the getProteinData API endpoint.
 Implement features like sorting, filtering, and pagination for large datasets.
 Provide options to download the dataset or view additional details in a modal or a separate view.
 */
 import React, { Component } from "react";
-import Searchbox from "./biomuta_searchbox";
-import SearchResults from "./biomuta_SearchResults";
 import PlotComponent from "./biomuta_plot";
-import $ from "jquery";
+import Loadingicon from "./global/loading_icon";
+import Paginator from "./paginator";
 
 class DatasetPage extends Component {
   state = {
-    searchResults: [],
+    mutationTable: [],
     plotData1: [],
     plotData2: [],
+    error: null,
+    canonicalAc: "", 
+    isLoading: true, 
+    currentPage: 1,
+    rowsPerPage: 10, 
   };
 
-  handleSearch = (results) => {
-    const queryValue = $("#query").val() || "";
+  componentDidMount() {
+    console.log("Component did mount.");
+    const canonicalAc = window.location.pathname.split("/").pop();
+    this.setState({ canonicalAc }, () => {
+      console.log("Canonical AC set:", this.state.canonicalAc);
+      this.fetchProteinData();
+    });
+  }
+
+  fetchProteinData = () => {
+    const { canonicalAc } = this.state;
+    console.log("Starting to fetch protein data for:", canonicalAc);
+  
+    const startFetch = performance.now(); // Start timing the fetch
+  
     fetch("/biomuta/api/getProteinData", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fieldvalue: queryValue })
+      body: JSON.stringify({ fieldvalue: canonicalAc })
     })
-    .then((res) => res.json())
+    .then((res) => {
+      const fetchDuration = performance.now() - startFetch;
+      console.log("Fetch completed in:", fetchDuration, "ms");
+      return res.json();
+    })
     .then(
       (result) => {
+        console.log("Result received:", result); // Log the entire result object
+  
         if (result.taskStatus === 1) {
+          console.log("Data processing successful. Setting state with fetched data.");
           this.setState({
-            searchResults: results,
+            mutationTable: result.mutationtable,
             plotData1: result.plotdata1,
             plotData2: result.plotdata2,
+            error: null,
+            isLoading: false,
+          }, () => {
+            console.log("State updated with new data.");
           });
         } else {
-          alert(result.errorMsg);
+          console.log("Data processing failed. Error message:", result.errorMsg);
+  
+          // Convert the error message to string, if it's not already
+          const errorMessage = typeof result.errorMsg === 'string' ? result.errorMsg : JSON.stringify(result.errorMsg);
+          
+          this.setState({ error: errorMessage, isLoading: false }, () => {
+            console.log("Error in fetching data:", this.state.error);
+          });
         }
       },
       (error) => {
         console.error("Error fetching protein data:", error);
+  
+        const errorMessage = typeof error === 'string' ? error : JSON.stringify(error);
+        this.setState({ error: errorMessage, isLoading: false });
       }
     );
   };
 
+  handlePageChange = (pageNumber) => {
+    console.log("Page changed to:", pageNumber);
+    this.setState({ currentPage: pageNumber });
+  };
+
+  renderMutationTable = () => {
+    console.log("Rendering mutation table.");
+    const { mutationTable, currentPage, rowsPerPage } = this.state;
+    if (mutationTable.length === 0) {
+      return <p>No mutation data available for the given protein.</p>;
+    }
+  
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = mutationTable.slice(indexOfFirstRow, indexOfLastRow);
+  
+    return (
+      <>
+        <table className="mutation-table">
+          <thead>
+            <tr>
+              <th>Chr</th>
+              <th>Pos in Pep</th>
+              <th>Ref Codon</th>
+              <th>Alt Codon</th>
+              <th>Ref Residue</th>
+              <th>Alt Residue</th>
+              <th>Cancer Id</th>
+              <th>Uberon Id</th>
+              <th>Frequency</th>
+              <th>Data Source</th>
+              <th>UniProt Annotation</th>
+              <th>NetNGlyc Annotation</th>
+              <th>PMID</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentRows.map((row, index) => (
+              <tr key={index}>
+                {row.map((cell, idx) => (
+                  <td key={idx}>
+                    {Array.isArray(cell) ? cell.map(item => String(item)).join(', ') : String(cell)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <Paginator
+          rowsPerPage={rowsPerPage}
+          totalRows={mutationTable.length}
+          paginate={this.handlePageChange}
+          currentPage={currentPage}
+        />
+      </>
+    );
+  };
+
+  
+  
+  renderChartInfo = () => {
+    console.log("Rendering chart info.");
+    return (
+      <div className="chart-info">
+        <h3>Understanding the Charts</h3>
+        <p>
+          The charts below provide a visual representation of the mutation data associated with this protein.
+        </p>
+        <ul>
+          <li>
+            <strong>Cancer Type vs. nsSNV Frequency Plot:</strong> The cancer type vs. nsSNV frequency plot displays the frequency of reported nsSNVs (y-axis) in the gene/protein of interest associated with specific cancer types, as indicated by DOIDs and names on the x-axis. A higher bar indicates a higher occurrence of mutations in that particular cancer type.
+          </li>
+          <li>
+            <strong>Amino Acid Position vs. SNV Frequency Plot:</strong> The SNV frequency vs. amino acid position plot shows the frequency of nsSNVs (y-axis) reported for each position in the amino acid sequence corresponding to the specified gene/protein (x-axis).
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
   render() {
+    console.log("Rendering DatasetPage.");
+    const { canonicalAc, error, plotData1, plotData2, isLoading } = this.state;
+
     return (
       <div className="dataset-page">
-        {/* Introduction and Information Section */}
         <div className="info-section">
-          <h2>BioMuta Protein Dataset Search</h2>
+          <h2>Protein Data for {canonicalAc}</h2>
           <p>
-            Use this tool to search for detailed protein datasets by Gene Name, Accession Number, or Protein ID.
-            Enter your query in the search box below to retrieve relevant data.
-          </p>
-          <p>
-            <strong>Example Queries:</strong> KRAS, BRCA1, Q9P1W8-1
+            Below is the detailed mutation data and visualizations for the protein with accession {canonicalAc}.
           </p>
         </div>
 
-        {/* Search Box Section */}
-        <div className="search-container">
-          <Searchbox 
-            placeholder="Search a protein"
-            onSearch={this.handleSearch}
-          />
-        </div>
+        {isLoading ? (
+          <Loadingicon />
+        ) : error ? (
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
+        ) : (
+          <>
+            <div className="mutation-table-container">
+              {this.renderMutationTable()}
+            </div>
 
-        {/* Search Results Section */}
-        <div className="search-results-container">
-          {this.state.searchResults.length > 0 ? (
-            <SearchResults 
-              results={this.state.searchResults}
-              onSearch={this.handleSearch}
-            />
-          ) : (
-            <p>No data available for the given query.</p>
-          )}
-        </div>
+            {this.renderChartInfo()}
 
-        {/* Plot Section */}
-        <div className="plot-container">
-          <PlotComponent plotData={this.state.plotData1} title="Cancer Type vs. Frequency" />
-          <PlotComponent plotData={this.state.plotData2} title="Position vs. Frequency" chartType="LineChart" />
-        </div>
+            <div className="plot-container">
+              {plotData1.length > 0 && (
+                <PlotComponent plotData={plotData1} title="Cancer Type vs. Frequency" />
+              )}
+              {plotData2.length > 0 && (
+                <PlotComponent plotData={plotData2} title="Position vs. Frequency" />
+              )}
+            </div>
+          </>
+        )}
       </div>
     );
   }

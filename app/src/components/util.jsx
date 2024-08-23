@@ -222,3 +222,33 @@ export function rndrMiniTable(inObj){
 }
 
 
+export function renderTable(objList, headers) {
+  if (objList.length === 0) {
+    return (
+      <div className="row" style={{ color: "red", padding: "20px" }}>
+        No results found!
+      </div>
+    );
+  }
+
+  return (
+    <table className="table table-striped">
+      <thead>
+        <tr>
+          {headers.map((header, index) => (
+            <th key={index}>{header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {objList.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {row.map((cell, cellIndex) => (
+              <td key={cellIndex}>{cell}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
