@@ -109,17 +109,19 @@ class DatasetPage extends Component {
           <thead>
             <tr>
               <th>Chr</th>
-              <th>Pos in Pep</th>
+              <th>Chr Position</th>
+              <th>Protein Position</th>
               <th>Ref Codon</th>
               <th>Alt Codon</th>
               <th>Ref Residue</th>
               <th>Alt Residue</th>
-              <th>Cancer Id</th>
-              <th>DoId</th>
+              <th>Cancer Type</th>
+              <th>Uberon Id</th>
+              
               <th>Frequency</th>
               <th>Data Source</th>
               <th>UniProt Annotation</th>
-              <th>NetNGlyc Annotation</th>
+              <th>Functional Predictions</th>
               <th>PMID</th>
             </tr>
           </thead>
@@ -176,6 +178,14 @@ class DatasetPage extends Component {
           <p>
             Below is the detailed mutation data and visualizations for the protein with accession {canonicalAc}.
           </p>
+          {/* Add the download button */}
+          {downloadFilename && (
+              <div className="download-button">
+                <a href={`/biomuta/api/download/${downloadFilename}`} download>
+                  Download CSV
+                </a>
+              </div>
+            )}
         </div>
 
         {isLoading ? (
@@ -201,14 +211,7 @@ class DatasetPage extends Component {
               )}
             </div>
 
-            {/* Add the download button */}
-            {downloadFilename && (
-              <div className="download-button">
-                <a href={`/biomuta/api/download/${downloadFilename}`} download>
-                  Download CSV
-                </a>
-              </div>
-            )}
+            
           </>
         )}
       </div>

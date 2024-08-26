@@ -10,12 +10,15 @@ This component should fetch results from the searchBioMuta API endpoint and disp
 import React, { Component } from "react";
 import Loadingicon from "./global/loading_icon";
 import BioMutaTable from "./BiomutaTable";
+import Paginator from "./paginator";
 
 class SearchResults extends Component {
   state = {
     isLoaded: true,
     isSearching: false,
     response: null,
+    currentPage: 1,  // Current page for pagination
+    rowsPerPage: 10,  // Number of rows per page
   };
 
   componentDidMount() {
@@ -52,6 +55,7 @@ class SearchResults extends Component {
           response: searchBioMutaResult,
           isLoaded: true,
           isSearching: false,
+          currentPage: 1,  // Reset to the first page when new data is loaded
         });
       } else {
         this.setState({
@@ -86,8 +90,12 @@ class SearchResults extends Component {
     });
   }
 
+  handlePageChange = (pageNumber) => {
+    this.setState({ currentPage: pageNumber });
+  };
+
   render() {
-    const { response, isLoaded, isSearching } = this.state;
+    const { response, isLoaded, isSearching, currentPage, rowsPerPage } = this.state;
 
     if (isSearching) {
       return <Loadingicon />;
@@ -109,7 +117,12 @@ class SearchResults extends Component {
     const data = response.searchresults.slice(2); // Skip the header and type rows
     const cleanedData = this.cleanData(data);
 
-    const renderedData = cleanedData.map((row, rowIndex) => {
+    // Get current rows
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = cleanedData.slice(indexOfFirstRow, indexOfLastRow);
+
+    const renderedData = currentRows.map((row, rowIndex) => {
       return row.map((cell, cellIndex) => {
         if (cellIndex === 0) {
           return (
@@ -129,6 +142,12 @@ class SearchResults extends Component {
     return (
       <div className="search-results-container">
         <BioMutaTable headers={headers} data={renderedData} />
+        <Paginator
+          rowsPerPage={rowsPerPage}
+          totalRows={cleanedData.length}
+          paginate={this.handlePageChange}
+          currentPage={currentPage}
+        />
       </div>
     );
   }

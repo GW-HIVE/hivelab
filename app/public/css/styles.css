@@ -490,18 +490,63 @@ span.faqquestionid{
   
   /* Paginator container at the top and bottom */
   .paginator-container {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
   }
   
-  .paginator-container.top {
-    border-bottom: 1px solid #ccc;
+  .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
   
-  .paginator-container.bottom {
-    border-top: 1px solid #ccc;
-    padding-top: 10px;
+  .page-item {
+    margin: 0 5px;
   }
+  
+  .page-link {
+    padding: 8px 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #00457C;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .page-link:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .page-item.active .page-link {
+    background-color: #00457C;
+    color: white;
+  }
+  
+  .page-item.disabled .page-link {
+    background-color: #e9ecef;
+    color: #6c757d;
+    pointer-events: none;
+  }
+  
+  .records-info {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  @media (max-width: 768px) {
+    .paginator-container {
+      flex-direction: column;
+    }
+    .records-info {
+      margin-top: 10px;
+    }
+  }
+  
   
   /* Search results table styling */
   .results-table {
@@ -788,24 +833,29 @@ span.faqquestionid{
     font-style: italic;
   }
   
+
+
   /*Download csv button*/
+
 
   .download-button {
     margin-top: 20px;
-    text-align: center;
+    text-align: left;
   }
   
   .download-button a {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #1F618D;
     color: white;
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
   
   .download-button a:hover {
     background-color: #0056b3;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
   }
-  

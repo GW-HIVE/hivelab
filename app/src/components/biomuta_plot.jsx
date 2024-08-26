@@ -8,15 +8,16 @@ The charts should be interactive, allowing users to toggle between different vie
 Integrate with the dataset view to provide detailed data visualizations.
 
 */
-import React from "react";
-import { Chart } from "react-google-charts";
+import React from 'react';
+import Chart from 'react-google-charts';
+
 const PlotComponent = ({ plotData, title }) => {
   const transformDataForChart = (plotData) => {
     if (!plotData || plotData.length === 0) {
       console.log("No plotData available.");
       return [];
     }
-    const chartData = [["Label", "Value"]];
+    const chartData = [["Label", "Frequency"]];
     plotData.forEach((dataPoint) => {
       console.log("Transforming dataPoint:", dataPoint);
       chartData.push([dataPoint.x, dataPoint.y1]);
@@ -37,6 +38,24 @@ const PlotComponent = ({ plotData, title }) => {
 
   console.log("Rendering chart with data:", transformedPlotData);
 
+  const chartOptions = {
+    chartArea: { width: '70%' },
+    hAxis: {
+      title: title === "Cancer Type vs. Frequency" ? 'Frequency of nsSNVs' : 'Frequency of nsSNVs',
+      minValue: 0,
+      textStyle: { fontSize: 12, color: '#333' },
+      titleTextStyle: { fontSize: 14, bold: true, color: '#333' },
+    },
+    vAxis: {
+      title: title === "Cancer Type vs. Frequency" ? 'Cancer Type (DOID and Name)' : 'Amino Acid Position',
+      textStyle: { fontSize: 12, color: '#333' },
+      titleTextStyle: { fontSize: 14, bold: true, color: '#333' },
+    },
+    legend: { position: 'none' },
+    backgroundColor: '#f9f9f9',
+    bar: { groupWidth: '75%' },
+  };
+
   return (
     <div style={styles.plotContainer}>
       <h3 style={styles.plotTitle}>{title}</h3>
@@ -45,28 +64,11 @@ const PlotComponent = ({ plotData, title }) => {
         width="100%"
         height="400px"
         data={transformedPlotData}
-        options={{
-          chartArea: { width: '70%' },
-          hAxis: {
-            title: 'Frequency',
-            minValue: 0,
-            textStyle: { fontSize: 12, color: '#333' },
-            titleTextStyle: { fontSize: 14, bold: true, color: '#333' }
-          },
-          vAxis: {
-            title: 'Cancer Type / Position',
-            textStyle: { fontSize: 12, color: '#333' },
-            titleTextStyle: { fontSize: 14, bold: true, color: '#333' }
-          },
-          legend: { position: 'none' },
-          backgroundColor: '#f9f9f9',
-          bar: { groupWidth: '75%' }
-        }}
+        options={chartOptions}
       />
     </div>
   );
 };
-
 
 const styles = {
   plotContainer: {
