@@ -41,13 +41,13 @@ const PlotComponent = ({ plotData, title }) => {
   const chartOptions = {
     chartArea: { width: '70%' },
     hAxis: {
-      title: title === "Cancer Type vs. Frequency" ? 'Frequency of nsSNVs' : 'Frequency of nsSNVs',
-      minValue: 0,
+      title: title === "Cancer Type vs. Frequency" ? 'Cancer Type (DOID and Name)' : 'Amino Acid Position',
       textStyle: { fontSize: 12, color: '#333' },
       titleTextStyle: { fontSize: 14, bold: true, color: '#333' },
     },
     vAxis: {
-      title: title === "Cancer Type vs. Frequency" ? 'Cancer Type (DOID and Name)' : 'Amino Acid Position',
+      title: title === "Cancer Type vs. Frequency" ? 'Frequency of nsSNVs' : 'Frequency of nsSNVs',
+      minValue: 0,
       textStyle: { fontSize: 12, color: '#333' },
       titleTextStyle: { fontSize: 14, bold: true, color: '#333' },
     },
@@ -60,7 +60,7 @@ const PlotComponent = ({ plotData, title }) => {
     <div style={styles.plotContainer}>
       <h3 style={styles.plotTitle}>{title}</h3>
       <Chart
-        chartType="BarChart"
+        chartType="ColumnChart"  // Changed from "BarChart" to "ColumnChart"
         width="100%"
         height="400px"
         data={transformedPlotData}

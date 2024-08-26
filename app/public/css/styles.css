@@ -699,6 +699,7 @@ span.faqquestionid{
     background-color: #f1f1f1;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
   }
   
   .dataset-page .search-container,
@@ -725,10 +726,22 @@ span.faqquestionid{
   
   .plot-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 20px;
+    align-items: center;
   }
   
+  .horizontal-plots {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .horizontal-plots > div {
+    flex: 1;
+    margin: 0 10px;
+  }
+
   .protein-table {
     width: 100%;
     border-collapse: collapse;
@@ -806,7 +819,7 @@ span.faqquestionid{
   .mutation-table td {
     border: 1px solid #cccccc;
     padding: 10px;
-    text-align: center;
+    
   }
   
   .mutation-table th {
@@ -825,6 +838,7 @@ span.faqquestionid{
   .error-message {
     color: red;
     font-weight: bold;
+    text-align: center;
   }
   
   .loading-container,
@@ -858,4 +872,26 @@ span.faqquestionid{
     color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
+  }
+
+
+  .pagination-download-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .download-button a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1F618D;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .download-button a:hover {
+    background-color: #0056b3;
   }

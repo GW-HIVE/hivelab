@@ -1,12 +1,3 @@
-
-/*
-ProteinDatasetPage Component
-Purpose: Handles rendering detailed datasets for specific proteins.
-Related Backend Scripts: getProteinData.py
-This component should render detailed datasets returned by the getProteinData API endpoint.
-Implement features like sorting, filtering, and pagination for large datasets.
-Provide options to download the dataset or view additional details in a modal or a separate view.
-*/
 import React, { Component } from "react";
 import PlotComponent from "./biomuta_plot";
 import Loadingicon from "./global/loading_icon";
@@ -137,12 +128,22 @@ class DatasetPage extends Component {
             ))}
           </tbody>
         </table>
-        <Paginator
-          rowsPerPage={rowsPerPage}
-          totalRows={mutationTable.length}
-          paginate={this.handlePageChange}
-          currentPage={currentPage}
-        />
+        <div className="pagination-download-container">
+          <Paginator
+            rowsPerPage={rowsPerPage}
+            totalRows={mutationTable.length}
+            paginate={this.handlePageChange}
+            currentPage={currentPage}
+          />
+          {/* Render the download button next to the paginator */}
+          {this.state.downloadFilename && (
+            <div className="download-button">
+              <a href={`/biomuta/api/download/${this.state.downloadFilename}`} download>
+                Download CSV
+              </a>
+            </div>
+          )}
+        </div>
       </>
     );
   };
@@ -170,7 +171,7 @@ class DatasetPage extends Component {
   render() {
     console.log("Rendering DatasetPage.");
     const { canonicalAc, error, plotData1, plotData2, isLoading, downloadFilename } = this.state;
-
+  
     return (
       <div className="dataset-page">
         <div className="info-section">
@@ -178,16 +179,8 @@ class DatasetPage extends Component {
           <p>
             Below is the detailed mutation data and visualizations for the protein with accession {canonicalAc}.
           </p>
-          {/* Add the download button */}
-          {downloadFilename && (
-              <div className="download-button">
-                <a href={`/biomuta/api/download/${downloadFilename}`} download>
-                  Download CSV
-                </a>
-              </div>
-            )}
         </div>
-
+  
         {isLoading ? (
           <Loadingicon />
         ) : error ? (
@@ -196,27 +189,29 @@ class DatasetPage extends Component {
           </div>
         ) : (
           <>
+            {/* Plots positioned horizontally */}
+            <div className="plot-container">
+              <div className="horizontal-plots">
+                {Array.isArray(plotData1) && plotData1.length > 0 && (
+                  <PlotComponent plotData={plotData1} title="Cancer Type vs. Frequency" />
+                )}
+                {Array.isArray(plotData2) && plotData2.length > 0 && (
+                  <PlotComponent plotData={plotData2} title="Position vs. Frequency" />
+                )}
+              </div>
+            </div>
+  
+            {this.renderChartInfo()}
+  
             <div className="mutation-table-container">
               {this.renderMutationTable()}
             </div>
-
-            {this.renderChartInfo()}
-
-            <div className="plot-container">
-              {Array.isArray(plotData1) && plotData1.length > 0 && (
-                <PlotComponent plotData={plotData1} title="Cancer Type vs. Frequency" />
-              )}
-              {Array.isArray(plotData2) && plotData2.length > 0 && (
-                <PlotComponent plotData={plotData2} title="Position vs. Frequency" />
-              )}
-            </div>
-
-            
           </>
         )}
       </div>
     );
   }
+  
 }
 
 export default DatasetPage;
