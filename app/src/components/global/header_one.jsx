@@ -32,13 +32,16 @@ class Backendheader extends Component {
         for (var j in obj.children){
           var o = obj.children[j];
           drpDownItemList.push(
-            <NavDropdown.Item href={o.url} className="reglinkblue">
+            <NavDropdown.Item key={j} // Add key here
+              href={o.url} className="reglinkblue">
               {o.label}
             </NavDropdown.Item>
           );
         }
         linkList.push(
-          <NavDropdown  className="reglinkwhite fgtext" 
+          <NavDropdown  
+            key={i} // Add key here
+            className="reglinkwhite fgtext" 
             title={<span className="my-auto reglinkwhite">{obj.label}</span>}
             id="basic-nav-dropdown"
             style={{marginRight:"20px"}}>

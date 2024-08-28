@@ -36,6 +36,7 @@ class StaticPage extends Component {
             tmpState.dialog.msg = "Page=" + this.props.pageId + " does NOT exist!";
           }
           else{
+            
             tmpState.html = result.replace("<hivelabtag>", "");
           }
 	  this.setState(tmpState);
