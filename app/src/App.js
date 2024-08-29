@@ -10,6 +10,7 @@ import DatasetPage from "./components/Proteinview_dataset_page"; // Import the B
 import configObj from "./components/global/config.json";
 
 import BiomutaParentPage from "./components/BiomutaParentPage";
+import bioxpressParentPage from "./components/bioxpressParentPage";
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
 
           {/* BioMuta Parent Page */}
           <Route path="/biomuta" component={BiomutaParentPage} />
+          <Route path="/bioxpress" component={bioxpressParentPage} />
             <Route
               path="/:pageId"
               render={(props) => (
