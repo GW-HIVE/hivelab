@@ -156,7 +156,7 @@ class TranscriptDatasetPage extends Component {
             <div className="download-buttons">
               {downloadFiles.map((file, index) => (
                 <div key={index} className="download-button">
-                  <a href={`/biomuta/api/download/${file}`} download>
+                  <a href={`/bioxpress/api/download/${file}`} download>
                     Download {file.split("-")[0].toUpperCase()} CSV
                   </a>
                 </div>

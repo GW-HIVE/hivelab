@@ -8,13 +8,20 @@ const PlotComponent = ({ plotData, title, yAxisTitle, xAxisTitle, description })
       return [];
     }
 
+    // Extract legend titles from the first row of plotData, skipping "null"
+    const legendTitles = plotData[0].slice(1).map((legend, index) => legend || `Expression ${index + 1}`);
+
     const chartData = [
-      ["Cancer Type", ...Array.from({ length: plotData[0].length - 1 }, (_, i) => `Expression ${i + 1}`)]
+      ["Cancer Type", ...legendTitles]
     ];
 
     plotData.forEach((dataPoint) => {
       const [label, ...values] = dataPoint;
-      chartData.push([label, ...values.map(value => parseFloat(value))]);
+
+      // Skip the row if the label is "null"
+      if (label.toLowerCase() !== 'null') {
+        chartData.push([label, ...values.map(value => parseFloat(value))]);
+      }
     });
 
     return chartData;
