@@ -101,12 +101,13 @@ class TranscriptDatasetPage extends Component {
                 {Array.isArray(plotData1) && plotData1.length > 0 && (
                   <>
                     <BioxpressPlotComponent
-                      plotData={plotData1}
+                      plotData={plotData1.slice(1)}  // Slicing  to remove the first row
                       title="Expression Trend Frequency Plot"
                       yAxisTitle="Counts and frequencies of expression trends"
                       xAxisTitle="Cancer Type"
                       colors={['#4CAF50', '#FF7043']}
                       description={plotDescriptions.plotdesc_1}
+                      legend={['Over-expression', 'Under-expression']} // Pass the legend titles
                     />
                   </>
                 )}
@@ -115,12 +116,13 @@ class TranscriptDatasetPage extends Component {
                 {Array.isArray(plotData2) && plotData2.length > 0 && (
                   <>
                     <BioxpressPlotComponent
-                      plotData={plotData2}
+                      plotData={plotData2.slice(1)}  // Sliceto remove the first row
                       title="Expression Trend Significance Plot"
                       yAxisTitle="Frequency (%) of expression trends"
                       xAxisTitle="Cancer Type"
                       colors={['#42A5F5', '#FFA726']}
                       description={plotDescriptions.plotdesc_2}
+                      legend={['Patients matching significant trend with threshold of patient |log2FC| > 0', 'Patients matching significant trend with threshold of patient |log2FC| > cancer |log2FC|']} // Pass the legend titles
                     />
                   </>
                 )}

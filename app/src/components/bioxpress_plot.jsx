@@ -1,26 +1,29 @@
 import React from 'react';
 import Chart from 'react-google-charts';
 
-const PlotComponent = ({ plotData, title, yAxisTitle, xAxisTitle, description }) => {
+const PlotComponent = ({ plotData, title, yAxisTitle, xAxisTitle, description, legend }) => {
   const transformDataForChart = (plotData) => {
     if (!plotData || plotData.length === 0) {
       console.log("No plotData available.");
       return [];
     }
 
-    // Extract legend titles from the first row of plotData, skipping "null"
-    const legendTitles = plotData[0].slice(1).map((legend, index) => legend || `Expression ${index + 1}`);
+    // Extract legend titles either from the provided legend or from plotData's first row
+    const legendTitles = legend || plotData[0].slice(1).map((_, index) => `Expression ${index + 1}`);
 
     const chartData = [
       ["Cancer Type", ...legendTitles]
     ];
 
     plotData.forEach((dataPoint) => {
-      const [label, ...values] = dataPoint;
+      const label = dataPoint[0];  // The first element is the label (e.g., Cancer Type)
+      const values = dataPoint.slice(1);  // The rest are the data points
 
-      // Skip the row if the label is "null"
-      if (label.toLowerCase() !== 'null') {
+      // Ensure that the values are all numbers and there's no discrepancy in the number of elements
+      if (values.length === legendTitles.length) {
         chartData.push([label, ...values.map(value => parseFloat(value))]);
+      } else {
+        console.warn(`Skipping data point due to mismatch in lengths: ${dataPoint}`);
       }
     });
 
@@ -54,7 +57,7 @@ const PlotComponent = ({ plotData, title, yAxisTitle, xAxisTitle, description })
       textStyle: { fontSize: 12, color: '#333' },
       titleTextStyle: { fontSize: 14, bold: true, color: '#333' },
     },
-    legend: { position: 'top', alignment: 'center' },
+    legend: { position: 'top', alignment: 'start', maxLines: 3, textStyle: { fontSize: 12 }},
     backgroundColor: '#f9f9f9',
     bar: { groupWidth: '75%' },
     colors: ['#4CAF50', '#FF7043', '#42A5F5', '#66BB6A', '#FFA726'],
