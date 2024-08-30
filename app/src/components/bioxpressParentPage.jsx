@@ -16,15 +16,15 @@ const BioxpressParentPage = () => {
   return (
     <div style={styles.pageContainer}>
       <div style={styles.header}>
-        <h1>BioXpress Gene Search Search</h1>
+        <h1>BioXpress Gene Search</h1>
       </div>
 
       <div style={styles.infoSection}>
-        <p>BioMuta can be used to query the cancer nsSNV database using a gene- or protein-centric search.Use this tool to search for detailed protein datasets by Gene Name, Accession Number, or Protein ID. Enter your query in the search box below to retrieve relevant data. </p>
+        <p>BioXpress, a database of cancer-associated differentially expressed genes and microRNAs, is an aggregation of data across many studies into a single source with a unified representation and annotation of functional attributes. </p>
         
-        <p>All possible hits to the submitted query will be listed in an interactive interim results table. Click on the hyperlinked UniProtKB AC to view detailed results for a given entity.</p>
+        <p>All possible hits to the submitted query will be listed in an interactive interim results table. Click on the hyperlinked Primary Feature ID to view detailed results for a given entity.</p>
 
-        <h5 style={styles.subHeader}>Example Queries: P14210</h5>
+        <h5 style={styles.subHeader}>Example Queries: P14210, Kras, Q9P1W8</h5>
         
       </div>
 
