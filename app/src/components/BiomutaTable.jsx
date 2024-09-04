@@ -19,7 +19,13 @@ const BioMutaTable = ({ headers, data }) => {
           {data.map((row, rowIndex) => (
             <tr key={rowIndex} style={rowIndex % 2 === 0 ? styles.evenRow : styles.oddRow}>
               {row.map((cell, cellIndex) => (
-                <td key={cellIndex} style={styles.cell}>{cell}</td>
+                <td key={cellIndex} style={styles.cell}>
+                  {typeof cell === 'string' && cell.startsWith('<a') ? (
+                    <span dangerouslySetInnerHTML={{ __html: cell }} />
+                  ) : (
+                    cell
+                  )}
+                </td>
               ))}
             </tr>
           ))}
@@ -30,33 +36,34 @@ const BioMutaTable = ({ headers, data }) => {
 };
 
 const styles = {
-    tableContainer: {
-      width: '100%',
-      marginTop: '20px',
-    },
-    table: {
-      width: '100%',
-      borderCollapse: 'collapse',
-      fontFamily: 'Arial, sans-serif',
-    },
-    header: {
-      backgroundColor: '#00395D',  // Updated to match the nav bar color
-      color: 'white',
-      textAlign: 'left',
-      padding: '12px 8px',  // Adjusted padding for a more polished look
-      border: '1px solid #ddd',
-    },
-    evenRow: {
-      backgroundColor: '#f2f2f2',
-    },
-    oddRow: {
-      backgroundColor: '#ffffff',
-    },
-    cell: {
-      textAlign: 'left',
-      padding: '10px 8px',  // Adjusted padding for better spacing
-      border: '1px solid #ddd',
-      color: '#333',  // Text color to match the overall theme
-    },
-  };
+  tableContainer: {
+    width: '100%',
+    marginTop: '20px',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    fontFamily: 'Arial, sans-serif',
+  },
+  header: {
+    backgroundColor: '#00395D',
+    color: 'white',
+    textAlign: 'left',
+    padding: '12px 8px',
+    border: '1px solid #ddd',
+  },
+  evenRow: {
+    backgroundColor: '#f2f2f2',
+  },
+  oddRow: {
+    backgroundColor: '#ffffff',
+  },
+  cell: {
+    textAlign: 'left',
+    padding: '10px 8px',
+    border: '1px solid #ddd',
+    color: '#333',
+  },
+};
+
 export default BioMutaTable;
