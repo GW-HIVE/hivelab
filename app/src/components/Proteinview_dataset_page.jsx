@@ -9,73 +9,95 @@ class DatasetPage extends Component {
     plotData1: [],
     plotData2: [],
     error: null,
-    canonicalAc: "", 
-    isLoading: true, 
+    canonicalAc: "",
+    isLoading: true,
     currentPage: 1,
     rowsPerPage: 10,
-    downloadFilename: "",  // Add this to store the filename for the CSV download
+    downloadFilename: "",
   };
 
   componentDidMount() {
     console.log("Component did mount.");
-    const canonicalAc = window.location.pathname.split("/").pop();
-    this.setState({ canonicalAc }, () => {
-      console.log("Canonical AC set:", this.state.canonicalAc);
-      this.fetchProteinData();
-    });
+    const urlParams = new URLSearchParams(window.location.search);
+    const geneName = urlParams.get('gene');
+
+    if (geneName) {
+      this.fetchProteinDataByGene(geneName);
+    } else {
+      const canonicalAc = window.location.pathname.split("/").pop();
+      this.setState({ canonicalAc }, () => {
+        console.log("Canonical AC set:", this.state.canonicalAc);
+        this.fetchProteinDataByAc();
+      });
+    }
   }
 
-  fetchProteinData = () => {
+  fetchProteinDataByGene(geneName) {
+    console.log("Starting to fetch protein data for gene:", geneName);
+
+    fetch("/biomuta/api/getProteinData", {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gene: geneName })
+    })
+    .then((res) => res.json())
+    .then(
+      (result) => {
+        console.log("Result received for gene:", result);
+
+        if (result.taskStatus === 1) {
+          this.setState({
+            mutationTable: Array.isArray(result.mutationtable) ? result.mutationtable : [],
+            plotData1: Array.isArray(result.plotdata1) ? result.plotdata1 : [],
+            plotData2: Array.isArray(result.plotdata2) ? result.plotdata2 : [],
+            downloadFilename: result.downloadfilename || "",
+            error: null,
+            isLoading: false,
+          });
+        } else {
+          this.setState({ error: result.errorMsg, isLoading: false });
+        }
+      },
+      (error) => {
+        console.error("Error fetching protein data by gene:", error);
+        this.setState({ error: JSON.stringify(error), isLoading: false });
+      }
+    );
+  }
+
+  fetchProteinDataByAc() {
     const { canonicalAc } = this.state;
     console.log("Starting to fetch protein data for:", canonicalAc);
-  
-    const startFetch = performance.now(); // Start timing the fetch
-  
+
     fetch("/biomuta/api/getProteinData", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fieldvalue: canonicalAc })
     })
-    .then((res) => {
-      const fetchDuration = performance.now() - startFetch;
-      console.log("Fetch completed in:", fetchDuration, "ms");
-      return res.json();
-    })
+    .then((res) => res.json())
     .then(
       (result) => {
-        console.log("Result received:", result); // Log the entire result object
-  
+        console.log("Result received for canonical AC:", result);
+
         if (result.taskStatus === 1) {
-          console.log("Data processing successful. Setting state with fetched data.");
           this.setState({
             mutationTable: Array.isArray(result.mutationtable) ? result.mutationtable : [],
             plotData1: Array.isArray(result.plotdata1) ? result.plotdata1 : [],
             plotData2: Array.isArray(result.plotdata2) ? result.plotdata2 : [],
-            downloadFilename: result.downloadfilename || "",  // Store the download filename
+            downloadFilename: result.downloadfilename || "",
             error: null,
             isLoading: false,
-          }, () => {
-            console.log("State updated with new data.");
           });
         } else {
-          console.log("Data processing failed. Error message:", result.errorMsg);
-  
-          // Convert the error message to string, if it's not already
-          const errorMessage = typeof result.errorMsg === 'string' ? result.errorMsg : JSON.stringify(result.errorMsg);
-          
-          this.setState({ error: errorMessage, isLoading: false }, () => {
-            console.log("Error in fetching data:", this.state.error);
-          });
+          this.setState({ error: result.errorMsg, isLoading: false });
         }
       },
       (error) => {
-        console.error("Error fetching protein data:", error);
-  
-        const errorMessage = typeof error === 'string' ? error : JSON.stringify(error);
-        this.setState({ error: errorMessage, isLoading: false });
+        console.error("Error fetching protein data by canonical AC:", error);
+        this.setState({ error: JSON.stringify(error), isLoading: false });
       }
     );
-  };
+  }
 
   handlePageChange = (pageNumber) => {
     console.log("Page changed to:", pageNumber);
@@ -89,11 +111,11 @@ class DatasetPage extends Component {
     if (!Array.isArray(mutationTable) || mutationTable.length === 0) {
       return <p>No mutation data available for the given protein.</p>;
     }
-  
+
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = mutationTable.slice(indexOfFirstRow, indexOfLastRow);
-  
+
     return (
       <>
         <table className="mutation-table">
@@ -108,7 +130,6 @@ class DatasetPage extends Component {
               <th>Alt Residue</th>
               <th>Cancer Type</th>
               <th>Uberon Id</th>
-              
               <th>Frequency</th>
               <th>Data Source</th>
               <th>UniProt Annotation</th>
@@ -171,7 +192,7 @@ class DatasetPage extends Component {
   render() {
     console.log("Rendering DatasetPage.");
     const { canonicalAc, error, plotData1, plotData2, isLoading, downloadFilename } = this.state;
-  
+
     return (
       <div className="dataset-page">
         <div className="info-section">
@@ -180,7 +201,7 @@ class DatasetPage extends Component {
             Below is the detailed mutation data and visualizations for the protein with accession {canonicalAc}.
           </p>
         </div>
-  
+
         {isLoading ? (
           <Loadingicon />
         ) : error ? (
@@ -200,9 +221,9 @@ class DatasetPage extends Component {
                 )}
               </div>
             </div>
-  
+
             {this.renderChartInfo()}
-  
+
             <div className="mutation-table-container">
               {this.renderMutationTable()}
             </div>
@@ -211,7 +232,6 @@ class DatasetPage extends Component {
       </div>
     );
   }
-  
 }
 
 export default DatasetPage;
