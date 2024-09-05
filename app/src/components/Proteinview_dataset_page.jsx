@@ -9,95 +9,88 @@ class DatasetPage extends Component {
     plotData1: [],
     plotData2: [],
     error: null,
-    canonicalAc: "",
-    isLoading: true,
+    canonicalAc: "", 
+    isLoading: true, 
     currentPage: 1,
     rowsPerPage: 10,
-    downloadFilename: "",
+    downloadFilename: "",  // Add this to store the filename for the CSV download
   };
 
   componentDidMount() {
-    console.log("Component did mount.");
     const urlParams = new URLSearchParams(window.location.search);
-    const geneName = urlParams.get('gene');
-
-    if (geneName) {
-      this.fetchProteinDataByGene(geneName);
+    const geneParam = urlParams.get('gene');
+    
+    let canonicalAc = "";
+  
+    if (geneParam) {
+      canonicalAc = geneParam;
     } else {
-      const canonicalAc = window.location.pathname.split("/").pop();
-      this.setState({ canonicalAc }, () => {
-        console.log("Canonical AC set:", this.state.canonicalAc);
-        this.fetchProteinDataByAc();
-      });
+      canonicalAc = window.location.pathname.split("/").pop();
     }
+  
+    this.setState({ canonicalAc }, () => {
+      console.log("Canonical AC set:", this.state.canonicalAc);
+      this.fetchProteinData();
+    });
   }
-
-  fetchProteinDataByGene(geneName) {
-    console.log("Starting to fetch protein data for gene:", geneName);
-
-    fetch("/biomuta/api/getProteinData", {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gene: geneName })
-    })
-    .then((res) => res.json())
-    .then(
-      (result) => {
-        console.log("Result received for gene:", result);
-
-        if (result.taskStatus === 1) {
-          this.setState({
-            mutationTable: Array.isArray(result.mutationtable) ? result.mutationtable : [],
-            plotData1: Array.isArray(result.plotdata1) ? result.plotdata1 : [],
-            plotData2: Array.isArray(result.plotdata2) ? result.plotdata2 : [],
-            downloadFilename: result.downloadfilename || "",
-            error: null,
-            isLoading: false,
-          });
-        } else {
-          this.setState({ error: result.errorMsg, isLoading: false });
-        }
-      },
-      (error) => {
-        console.error("Error fetching protein data by gene:", error);
-        this.setState({ error: JSON.stringify(error), isLoading: false });
-      }
-    );
-  }
-
-  fetchProteinDataByAc() {
+  
+  fetchProteinData = () => {
     const { canonicalAc } = this.state;
     console.log("Starting to fetch protein data for:", canonicalAc);
-
-    fetch("/biomuta/api/getProteinData", {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fieldvalue: canonicalAc })
-    })
-    .then((res) => res.json())
-    .then(
-      (result) => {
-        console.log("Result received for canonical AC:", result);
-
-        if (result.taskStatus === 1) {
+    
+    const startFetch = performance.now(); // Start timing the fetch
+    
+    let request;
+    if (window.location.search.includes("gene=")) {
+      // If a gene query parameter is present, use GET
+      request = fetch(`http://127.0.0.1:5000/getProteinData?gene=${canonicalAc}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } else {
+      // Otherwise, use POST for canonicalAc
+      request = fetch("http://127.0.0.1:5000/getProteinData", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fieldvalue: canonicalAc })
+      });
+    }
+  
+    request
+      .then((res) => {
+        const fetchDuration = performance.now() - startFetch;
+        console.log("Fetch completed in:", fetchDuration, "ms");
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("Result received:", result); // Log the entire result object
+    
+          if (result.taskStatus === 1) {
+            this.setState({
+              mutationTable: Array.isArray(result.mutationtable) ? result.mutationtable : [],
+              plotData1: Array.isArray(result.plotdata1) ? result.plotdata1 : [],
+              plotData2: Array.isArray(result.plotdata2) ? result.plotdata2 : [],
+              downloadFilename: result.downloadfilename || "",  // Store the download filename
+              error: null,
+              isLoading: false,
+            });
+          } else {
+            this.setState({
+              error: result.errorMsg,
+              isLoading: false
+            });
+          }
+        },
+        (error) => {
+          console.error("Error fetching protein data:", error);
           this.setState({
-            mutationTable: Array.isArray(result.mutationtable) ? result.mutationtable : [],
-            plotData1: Array.isArray(result.plotdata1) ? result.plotdata1 : [],
-            plotData2: Array.isArray(result.plotdata2) ? result.plotdata2 : [],
-            downloadFilename: result.downloadfilename || "",
-            error: null,
-            isLoading: false,
+            error: error.message,
+            isLoading: false
           });
-        } else {
-          this.setState({ error: result.errorMsg, isLoading: false });
         }
-      },
-      (error) => {
-        console.error("Error fetching protein data by canonical AC:", error);
-        this.setState({ error: JSON.stringify(error), isLoading: false });
-      }
-    );
-  }
+      );
+  };
 
   handlePageChange = (pageNumber) => {
     console.log("Page changed to:", pageNumber);
