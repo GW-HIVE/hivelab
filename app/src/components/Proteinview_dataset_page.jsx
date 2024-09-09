@@ -43,13 +43,13 @@ class DatasetPage extends Component {
     let request;
     if (window.location.search.includes("gene=")) {
       // If a gene query parameter is present, use GET
-      request = fetch(`biomuta/api/getProteinData?gene=${canonicalAc}`, {
+      request = fetch(`/biomuta/api/getProteinData?gene=${canonicalAc}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
     } else {
       // Otherwise, use POST for canonicalAc
-      request = fetch("biomuta/api/getProteinData", {
+      request = fetch("/biomuta/api/getProteinData", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fieldvalue: canonicalAc })
