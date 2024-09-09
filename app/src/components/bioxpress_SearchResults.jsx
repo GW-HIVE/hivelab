@@ -46,7 +46,7 @@ class SearchResults extends Component {
 
     console.log("searchData - Request object:", reqObj);
 
-    fetch("https://hivelab.prd.biochemistry.gwu.edu/bioxpress/api/transcriptSearch", {
+    fetch("/bioxpress/api/transcriptSearch", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
