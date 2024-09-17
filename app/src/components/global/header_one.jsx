@@ -1,19 +1,11 @@
 import React, { Component } from "react";
-import Loadingicon from "./loading_icon";
-import {Container,Navbar, Nav, NavItem, NavDropdown, MenuItem }   from 'react-bootstrap';
+import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import $ from "jquery";
 
-
-
-
 class Backendheader extends Component {
-
-  state = {
-  }
-
+  state = {}
 
   getHeaderLinks = () => {
-
     var linkList = [];
     for (var i in this.props.config.menu){
       var obj = this.props.config.menu[i];
@@ -22,7 +14,7 @@ class Backendheader extends Component {
       }
       if (obj.children.length === 0){
         linkList.push(
-          <Nav.Link href={obj.url} className="reglinkwhite" style={{marginRight:"20px"}}>
+          <Nav.Link href={obj.url} key={i} className="reglinkwhite" style={{marginRight:"20px"}}>
             {obj.label}
           </Nav.Link>
         );
@@ -32,65 +24,53 @@ class Backendheader extends Component {
         for (var j in obj.children){
           var o = obj.children[j];
           drpDownItemList.push(
-            <NavDropdown.Item key={j} // Add key here
+            <NavDropdown.Item key={`dropdown-item-${i}-${j}`} // Unique key
               href={o.url} className="reglinkblue">
               {o.label}
             </NavDropdown.Item>
           );
         }
         linkList.push(
-          <NavDropdown  
-            key={i} // Add key here
-            className="reglinkwhite fgtext" 
+          <NavDropdown
+            key={`dropdown-${i}`} // Unique key
+            className="reglinkwhite fgtext"
             title={<span className="my-auto reglinkwhite">{obj.label}</span>}
-            id="basic-nav-dropdown"
+            id={`basic-nav-dropdown-${i}`}
             style={{marginRight:"20px"}}>
             {drpDownItemList}
           </NavDropdown>
         );
       }
     }
-    
     return linkList;
   }
 
-
-
-
   render() {
-
-    
     var headerLinks = this.getHeaderLinks();
 
     return (
       <Navbar collapseOnSelect expand="lg" variant="dark" className="globalheader">
-      <Container >
-        <Navbar.Brand href="#home" className="navbarbrand" >
-        <a href="/">
-        <div className="globalheader_logo">
-          <div className="globalheader_logo_img">
-             <img alt="" src={process.env.PUBLIC_URL + '/imglib/gw_logo.png'}
-                style={{width:"60px"}} />
-            <img alt="" src={process.env.PUBLIC_URL + '/imglib/smhs_logo.png'}
-                style={{width:"180px", margin:"0px 0px 0px 10px"}} />
-          </div>
-        </div>
-        </a>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav" 
-          style={{ paddingLeft:"20px", border:"0px solid green"}}>
-          <Nav className="ms-auto reglinkwhite">{headerLinks}</Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+        <Container>
+          <Navbar.Brand href="#home" className="navbarbrand">
+            <a href="/">
+              <div className="globalheader_logo">
+                <div className="globalheader_logo_img">
+                  <img alt="" src={process.env.PUBLIC_URL + '/imglib/gw_logo.png'}
+                    style={{width:"60px"}} />
+                  <img alt="" src={process.env.PUBLIC_URL + '/imglib/smhs_logo.png'}
+                    style={{width:"180px", margin:"0px 0px 0px 10px"}} />
+                </div>
+              </div>
+            </a>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav" style={{ paddingLeft:"20px", border:"0px solid green"}}>
+            <Nav className="ms-auto reglinkwhite">{headerLinks}</Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     );
-
   }
 }
-
-
-
-
 
 export default Backendheader;
