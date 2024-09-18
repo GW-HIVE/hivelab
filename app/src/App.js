@@ -24,6 +24,8 @@ class App extends Component {
             
           {/* Protein Dataset Page - Using the canonicalAc from the URL */}
           <Route path="/biomuta/proteinview/:canonicalAc" component={DatasetPage} />
+          {/* Handle the case where the query parameter gene is present */}
+          <Route path="/biomuta/proteinview" component={DatasetPage} />
           <Route path="/bioxpress/transcriptView/:canonicalAc" component={TranscriptDatasetPage} />
 
           {/* BioMuta Parent Page */}

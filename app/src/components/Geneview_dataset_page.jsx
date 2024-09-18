@@ -31,7 +31,7 @@ class TranscriptDatasetPage extends Component {
   fetchProteinData = () => {
     const { canonicalAc } = this.state;
 
-    fetch("https://hivelab.tst.biochemistry.gwu.edu/bioxpress/api/getTranscriptData", {
+    fetch("/bioxpress/api/getTranscriptData", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fieldvalue: canonicalAc }),
