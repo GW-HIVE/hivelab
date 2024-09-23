@@ -29,13 +29,13 @@ const GalleryPage = () => {
       },
 
     {
-    src: '/imglib/GalleryImg/BCOTeam.jpg',
+    src: '/imglib/GalleryImg/BCOTeam.JPG',
     alt: 'BCOTeam',
     title: 'BCO Team',
     description: 'BioCompute Objects Team at BioCompute Conference and Workshop hosted at the FDA, 2024',
     },
     {
-        src: '/imglib/GalleryImg/TianyiWangPoster.jpg',
+        src: '/imglib/GalleryImg/TianyiWangPoster.JPG',
         alt: 'BioCompute Conference and Workshop, FDA',
         title: 'BioCompute Conference and Workshop, FDA',
         description: 'Research Associate Tianyi Wang (BioCompute Objects Project) presenting a poster on Visualization for Published BCO at the 2024 BioCompute Conference and Workshop hosted at the FDA, 2024',
