@@ -13,8 +13,8 @@ class Footer extends Component {
             style={{width:"100%"}}/>
           </div>
       </section>
-
-    </footer>
+      </footer>
+    
   </section>
 
     );
