@@ -63,7 +63,7 @@ class Backendheader extends Component {
     var headerLinks = this.getHeaderLinks();
 
     return (
-      <Navbar collapseOnSelect expand="lg" variant="dark" className="globalheader">
+      <Navbar collapseOnSelect expand="lg" variant="dark" className="globalheader" >
       <Container >
         <Navbar.Brand href="#home" className="navbarbrand" >
         <a href="/">
