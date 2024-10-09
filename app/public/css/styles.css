@@ -29,6 +29,7 @@ html, body {
 
 .globalheader {
     display:block;
+    
     float:left;
     height:100px;
     width:100%;
@@ -46,6 +47,7 @@ html, body {
     margin:0px 0px 0px 0px;
     font-family: 'Gruppo', cursive;
     border:0px dashed orange;
+    
 }
 .globalheader_logo_img {
     float:left;
@@ -73,8 +75,9 @@ html, body {
   color:#fff !important;
 }
 
+/* color of the dropdown sign */
 .dropdown>a::after {
-    color:#fff;
+    color:#ffffff;
 }
 
 
@@ -87,7 +90,7 @@ html, body {
 .reglinkwhite {
   cursor:pointer;
   text-decoration:none;
-  color:#fff !important;
+  color:white !important;
 }
 
 .gmenulink {
@@ -138,10 +141,17 @@ html, body {
     color:#990000;
 }
 
-.imagewrapper{
-  display:block;
-  float:left;
+.imagewrapper{ 
+  display:flex;
+  float: left;
+  align-items: flex-start;
   margin:10px 15px 0px 0px;
+  max-width: 400px;
+}
+.imagewrapper img {
+  width: 100%;
+  height: auto;
+  max-width: 100%; /* image stays responsive */
 }
 
 .leftblock{
@@ -273,7 +283,7 @@ span.faqquestionid{
     margin-right: 5px; 
 }
 
-.container {
+.hero-container {
     width: 90%;
     max-width: 1200px;
     margin: auto;
