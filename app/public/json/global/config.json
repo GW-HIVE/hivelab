@@ -57,6 +57,14 @@
           "nav":[
             {"pageid":"home", "url":"/", "label":"HOME"}
           ]
+        },
+        {
+          "pageid":"hivelabwiki",
+          "label":"HIVE LAB WIKI",
+          "url":"https://hivelab.biochemistry.gwu.edu/wiki/index.php?title=Main_Page",
+          "nav":[
+            {"pageid":"home", "url":"/", "label":"HOME"}
+          ]
         }
       ],
       "nav":[
