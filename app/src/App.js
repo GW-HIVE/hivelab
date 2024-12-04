@@ -28,7 +28,7 @@ class App extends Component {
           <Route path="/biomuta/proteinview" component={DatasetPage} />
           <Route path="/bioxpress/transcriptView/:canonicalAc" component={TranscriptDatasetPage} />
           {/* Gallery Page */}
-          <Route path="/gallery" component={GalleryPage} />
+          /* <Route path="/gallery" component={GalleryPage} /> */
           {/* BioMuta Parent Page */}
           <Route path="/biomuta" component={BiomutaParentPage} />
           <Route path="/bioxpress" component={bioxpressParentPage} />
