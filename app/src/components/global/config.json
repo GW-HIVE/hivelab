@@ -72,15 +72,6 @@
       ]
     },
     {
-      "pageid":"gallery",
-      "label":"GALLERY",
-      "url":"/gallery",
-      "children":[],
-      "nav":[
-        {"pageid":"home", "url":"/", "label":"HOME"}
-      ]
-    },
-    {
       "pageid":"more",
       "label":"MORE",
       "url":"/more",
