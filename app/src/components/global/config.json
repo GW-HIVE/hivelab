@@ -49,7 +49,7 @@
     {
       "pageid":"contact",
       "label":"CONTACT",
-      "url":"/wiki/contact",
+      "url":"https://hivelab.biochemistry.gwu.edu/wiki/Contact",
       "children":[],
       "nav":[
         {"pageid":"home", "url":"/", "label":"HOME"}
