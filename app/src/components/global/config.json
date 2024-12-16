@@ -11,6 +11,15 @@
       ]
     },
     {
+      "pageid":"wiki",
+      "label":"WIKI",
+      "url":"/wiki",
+      "children":[],
+      "nav":[
+        {"pageid":"home", "url":"/", "label":"HOME"}
+      ]
+    },
+    {
       "pageid":"projects",
       "label":"PROJECTS",
       "url":"/projects",
@@ -38,65 +47,14 @@
       ]
     },
     {
-      "pageid":"resources",
-      "label":"RESOURCES",
-      "url":"/resources",
-      "children":[
-        {
-          "pageid":"tools",
-          "label":"TOOLS",
-          "url":"/tools",
-          "nav":[
-            {"pageid":"home", "url":"/", "label":"HOME"}
-          ]
-        },
-        {
-          "pageid":"datasets",
-          "label":"DATASETS",
-          "url":"/datasets",
-          "nav":[
-            {"pageid":"home", "url":"/", "label":"HOME"}
-          ]
-        },
-        {
-          "pageid":"hivelabwiki",
-          "label":"HIVE LAB WIKI",
-          "url":"https://hivelab.biochemistry.gwu.edu/wiki/index.php?title=Main_Page",
-          "nav":[
-            {"pageid":"home", "url":"/", "label":"HOME"}
-          ]
-        }
-      ],
+      "pageid":"contact",
+      "label":"CONTACT",
+      "url":"/wiki/contact",
+      "children":[],
       "nav":[
         {"pageid":"home", "url":"/", "label":"HOME"}
       ]
     },
-    {
-      "pageid":"more",
-      "label":"MORE",
-      "url":"/more",
-      "children":[
-        {
-          "pageid":"opportunities",
-          "label":"OPPORTUNITIES",
-          "url":"/opportunities",
-          "nav":[
-            {"pageid":"home", "url":"/", "label":"HOME"}
-          ]
-        },
-        {
-          "pageid":"events",
-          "label":"EVENTS",
-          "url":"/events",
-          "nav":[
-            {"pageid":"home", "url":"/", "label":"HOME"}
-          ]
-        }
-      ],
-      "nav":[
-        {"pageid":"home", "url":"/", "label":"HOME"}
-      ]
-    }
   ]
 }
 
