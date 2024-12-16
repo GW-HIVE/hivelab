@@ -58,7 +58,7 @@ class Backendheader extends Component {
     return (
       <div className="leftblock" style={sList[0]}>
         <div class="leftblock" style={sList[1]}> 
-          The HIVE Lab (Mazumder Research Group)<br/>
+          Mazumder Research Group (HIVE Lab)<br/>
           <div className="leftblock" style={sList[2]}>
             {navLinks}
           </div>
