@@ -54,8 +54,6 @@
       "nav":[
         {"pageid":"home", "url":"/", "label":"HOME"}
       ]
-    },
+    }
   ]
 }
-
-
