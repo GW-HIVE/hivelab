@@ -13,7 +13,7 @@
     {
       "pageid":"wiki",
       "label":"WIKI",
-      "url":"/wiki",
+      "url":"https://hivelab.biochemistry.gwu.edu/wiki/",
       "children":[],
       "nav":[
         {"pageid":"home", "url":"/", "label":"HOME"}
